@@ -10,7 +10,8 @@ public class BallSpawner : MonoBehaviour
     [SerializeField] private float respawnDelay = 1.5f;
 
     private GameObject currentBall;
-    private bool waitingForRespawn;
+    private float timer;
+    private bool countingDown;
 
     private void Start()
     {
@@ -19,16 +20,27 @@ public class BallSpawner : MonoBehaviour
 
     private void Update()
     {
-        if (currentBall == null && !waitingForRespawn)
+        // Ball has been picked up or destroyed
+        if (currentBall == null)
         {
-            waitingForRespawn = true;
-            Invoke(nameof(SpawnBall), respawnDelay);
+            if (!countingDown)
+            {
+                countingDown = true;
+                timer = respawnDelay;
+            }
+
+            timer -= Time.deltaTime;
+
+            if (timer <= 0f)
+            {
+                SpawnBall();
+                countingDown = false;
+            }
         }
     }
 
     private void SpawnBall()
     {
         currentBall = Instantiate(ballPrefab, spawnPoint.position, spawnPoint.rotation);
-        waitingForRespawn = false;
     }
 }
