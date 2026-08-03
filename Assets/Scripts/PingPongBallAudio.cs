@@ -62,14 +62,9 @@ public class PingPongBallAudio : MonoBehaviour
 
         float impactSpeed = collision.relativeVelocity.magnitude;
 
-        audioSource.Stop();
-
-        audioSource.loop = false;
-        audioSource.clip = bounceClip;
-        audioSource.volume = Mathf.Clamp01(impactSpeed / 5f);
         audioSource.pitch = Random.Range(0.95f, 1.05f);
 
-        audioSource.Play();
+        audioSource.PlayOneShot(bounceClip, Mathf.Clamp01(impactSpeed / 5f));
     }
 
     private void OnCollisionStay(Collision collision)

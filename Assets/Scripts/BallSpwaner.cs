@@ -8,7 +8,7 @@ public class BallSpawner : MonoBehaviour
     [SerializeField] private Transform spawnPoint;
 
     [Header("Settings")]
-    [SerializeField] private float respawnDelay = 1.5f;
+    [SerializeField] private float respawnDelay = 5f;
 
     private bool ballOnPedestal;
     private Coroutine respawnRoutine;
