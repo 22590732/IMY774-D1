@@ -1,28 +1,32 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(AudioSource))]
 public class PingPongBallAudio : MonoBehaviour
 {
-    [Header("Audio Source References")]
-    [SerializeField] private AudioSource bounceSource;
-    [SerializeField] private AudioSource rollSource;
-    [SerializeField] private AudioSource outputSource;
+    [Header("Audio Clips")]
+    [SerializeField] private AudioClip bounceClip;
+    [SerializeField] private AudioClip rollClip;
 
-    [Header("Rolling Settings")]
+    [Header("Rolling")]
     [SerializeField] private float rollStartSpeed = 0.2f;
     [SerializeField] private float maxRollSpeed = 3.0f;
-    [SerializeField] private float maxRollVolume = 0.8f;
+    [SerializeField] private float maxRollVolume = 0.75f;
     [SerializeField] private float minPitch = 0.8f;
-    [SerializeField] private float maxPitch = 1.3f;
+    [SerializeField] private float maxPitch = 1.2f;
 
     private Rigidbody rb;
+    private AudioSource audioSource;
     private bool touchingSurface;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
 
-        outputSource.playOnAwake = false;
-        outputSource.loop = true;
+        audioSource.playOnAwake = false;
+        audioSource.spatialBlend = 1f;   // Fully 3D
+        audioSource.loop = false;
     }
 
     private void Update()
@@ -31,24 +35,23 @@ public class PingPongBallAudio : MonoBehaviour
 
         if (touchingSurface && speed > rollStartSpeed)
         {
-            if (outputSource.clip != rollSource.clip)
+            if (audioSource.clip != rollClip)
             {
-                outputSource.Stop();
-                outputSource.clip = rollSource.clip;
-                outputSource.loop = true;
-                outputSource.Play();
+                audioSource.clip = rollClip;
+                audioSource.loop = true;
+                audioSource.Play();
             }
 
             float t = Mathf.InverseLerp(rollStartSpeed, maxRollSpeed, speed);
 
-            outputSource.volume = Mathf.Lerp(0f, maxRollVolume, t);
-            outputSource.pitch = Mathf.Lerp(minPitch, maxPitch, t);
+            audioSource.volume = Mathf.Lerp(0f, maxRollVolume, t);
+            audioSource.pitch = Mathf.Lerp(minPitch, maxPitch, t);
         }
         else
         {
-            if (outputSource.clip == rollSource.clip && outputSource.isPlaying)
+            if (audioSource.clip == rollClip && audioSource.isPlaying)
             {
-                outputSource.Stop();
+                audioSource.Stop();
             }
         }
     }
@@ -59,12 +62,14 @@ public class PingPongBallAudio : MonoBehaviour
 
         float impactSpeed = collision.relativeVelocity.magnitude;
 
-        outputSource.Stop();
-        outputSource.loop = false;
-        outputSource.clip = bounceSource.clip;
-        outputSource.volume = Mathf.Clamp01(impactSpeed / 5f);
-        outputSource.pitch = Random.Range(0.95f, 1.05f);
-        outputSource.Play();
+        audioSource.Stop();
+
+        audioSource.loop = false;
+        audioSource.clip = bounceClip;
+        audioSource.volume = Mathf.Clamp01(impactSpeed / 5f);
+        audioSource.pitch = Random.Range(0.95f, 1.05f);
+
+        audioSource.Play();
     }
 
     private void OnCollisionStay(Collision collision)
@@ -76,7 +81,7 @@ public class PingPongBallAudio : MonoBehaviour
     {
         touchingSurface = false;
 
-        if (outputSource.clip == rollSource.clip)
-            outputSource.Stop();
+        if (audioSource.clip == rollClip)
+            audioSource.Stop();
     }
 }
