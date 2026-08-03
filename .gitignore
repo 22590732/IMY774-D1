@@ -1,0 +1,110 @@
+# ======================================
+# Unity
+# ======================================
+
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+UserSettings/
+Recordings/
+
+# Addressables
+ServerData/
+
+# Asset Bundles
+AssetBundles*/
+
+# ======================================
+# Unity Cloud
+# ======================================
+
+Assets/AssetStoreTools*
+
+# ======================================
+# Visual Studio / Rider / VS Code
+# ======================================
+
+.vs/
+.vscode/
+.idea/
+
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Rider
+*.DotSettings.user
+
+# ======================================
+# Build Outputs
+# ======================================
+
+*.apk
+*.aab
+*.unitypackage
+*.app
+*.exe
+*.ipa
+
+# ======================================
+# Crash Reports
+# ======================================
+
+sysinfo.txt
+
+# ======================================
+# OS Files
+# ======================================
+
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ======================================
+# Generated Documentation
+# ======================================
+
+Documentation~
+
+# ======================================
+# JetBrains
+# ======================================
+
+.idea/
+
+# ======================================
+# Blender
+# ======================================
+
+*.blend1
+*.blend2
+
+# ======================================
+# Temporary Files
+# ======================================
+
+*.bak
+*.orig
+*.tmp
+*.log
+
+# ======================================
+# Auto Generated
+# ======================================
+
+.gradle/
