@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class BallSpawner : MonoBehaviour
 {
@@ -9,38 +10,54 @@ public class BallSpawner : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private float respawnDelay = 1.5f;
 
-    private GameObject currentBall;
-    private float timer;
-    private bool countingDown;
+    private bool ballOnPedestal;
+    private Coroutine respawnRoutine;
 
     private void Start()
     {
         SpawnBall();
     }
 
-    private void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        // Ball has been picked up or destroyed
-        if (currentBall == null)
+        if (!other.CompareTag("PingPongBall"))
+            return;
+
+        ballOnPedestal = true;
+
+        // Cancel any pending respawn.
+        if (respawnRoutine != null)
         {
-            if (!countingDown)
-            {
-                countingDown = true;
-                timer = respawnDelay;
-            }
-
-            timer -= Time.deltaTime;
-
-            if (timer <= 0f)
-            {
-                SpawnBall();
-                countingDown = false;
-            }
+            StopCoroutine(respawnRoutine);
+            respawnRoutine = null;
         }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (!other.CompareTag("PingPongBall"))
+            return;
+
+        ballOnPedestal = false;
+
+        if (respawnRoutine == null)
+            respawnRoutine = StartCoroutine(RespawnAfterDelay());
+    }
+
+    private IEnumerator RespawnAfterDelay()
+    {
+        yield return new WaitForSeconds(respawnDelay);
+
+        if (!ballOnPedestal)
+        {
+            SpawnBall();
+        }
+
+        respawnRoutine = null;
     }
 
     private void SpawnBall()
     {
-        currentBall = Instantiate(ballPrefab, spawnPoint.position, spawnPoint.rotation);
+        Instantiate(ballPrefab, spawnPoint.position, spawnPoint.rotation);
     }
 }
