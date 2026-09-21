@@ -7085,6 +7085,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8095098306399292802, guid: 65d2555e92a54404aa3b07390fcc7ba2, type: 3}
     - target: {fileID: 3947465781733765988, guid: e6b634fe24ed81142ad816eddb451047, type: 3}
+      propertyPath: stopAfterFirstGrab
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3947465781733765988, guid: e6b634fe24ed81142ad816eddb451047, type: 3}
       propertyPath: requireTutorialGate
       value: 0
       objectReference: {fileID: 0}
