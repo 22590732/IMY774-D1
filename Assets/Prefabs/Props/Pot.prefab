@@ -122,6 +122,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 421b8c575cb258e479add0fb7a8ce1fb, type: 3}
       insertIndex: -1
       addedObject: {fileID: -3639234091285530362}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 421b8c575cb258e479add0fb7a8ce1fb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -1109968599654341122}
     - targetCorrespondingSourceObject: {fileID: 7384819396937615280, guid: 421b8c575cb258e479add0fb7a8ce1fb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 591737590821475908}
@@ -681,6 +684,21 @@ MonoBehaviour:
   m_LimitAngularVelocity: 0
   m_MaxLinearVelocityDelta: 10
   m_MaxAngularVelocityDelta: 20
+--- !u!114 &-1109968599654341122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7825291346668788011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3741711f4879dfa46acfe7abbb98bae8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlaceableProp
+  mode: 1
+  throwSpeed: 1
+  startFrozen: 1
 --- !u!1 &8434777002514051443 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1537473679671645449, guid: 421b8c575cb258e479add0fb7a8ce1fb, type: 3}

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 /// <summary>
@@ -31,6 +32,8 @@ public class PropSpawner : MonoBehaviour
     [SerializeField] private bool requireTutorialGate = false;
     [Tooltip("Grabbing the prop from this spawner calls BallSpawnGate.Unlock(). Tick on the ball container's spawner.")]
     [SerializeField] private bool unlockGateWhenGrabbed = false;
+    [Tooltip("After the first grab this spawner switches itself off for good, so the prop is not replaced. Tick on the ball container's spawner.")]
+    [SerializeField] private bool stopAfterFirstGrab = false;
 
     private GameObject current;
     private XRGrabInteractable currentGrab;
@@ -89,8 +92,17 @@ public class PropSpawner : MonoBehaviour
         currentGrab = current.GetComponentInChildren<XRGrabInteractable>();
         emptySince = -1f;
 
-        if (unlockGateWhenGrabbed && currentGrab != null)
-            currentGrab.selectEntered.AddListener(_ => BallSpawnGate.Unlock());
+        if ((unlockGateWhenGrabbed || stopAfterFirstGrab) && currentGrab != null)
+            currentGrab.selectEntered.AddListener(OnGrabbed);
+    }
+
+    private void OnGrabbed(SelectEnterEventArgs args)
+    {
+        if (unlockGateWhenGrabbed)
+            BallSpawnGate.Unlock();
+
+        if (stopAfterFirstGrab)
+            enabled = false;   // Update stops, so nothing is ever respawned
     }
 
     private void OnDrawGizmosSelected()
