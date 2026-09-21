@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 1915676017398366039}
   - component: {fileID: 2264752695406769794}
   - component: {fileID: 2262803475316668951}
+  - component: {fileID: 6242900986891971633}
   m_Layer: 0
   m_Name: PingPongBall
   m_TagString: PingPongBall
@@ -385,3 +386,17 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &6242900986891971633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4719884592182496424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27b69d3f3f9aee942b940af8c40a0826, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FloatingBall
+  floatDuration: 4
+  floatDamping: 3
