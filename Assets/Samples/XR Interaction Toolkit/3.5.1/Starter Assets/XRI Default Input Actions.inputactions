@@ -495,6 +495,16 @@
                     "interactions": "",
                     "initialStateCheck": true,
                     "priority": 0
+                },
+                {
+                    "name": "Delete",
+                    "type": "Button",
+                    "id": "f2fbbba1-fa35-4cb2-a443-1ba02044f0cb",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
                 }
             ],
             "bindings": [
@@ -951,8 +961,8 @@
                 },
                 {
                     "name": "",
-                    "id": "a8e29b2e-22be-4050-9675-d7f31f7e4c76",
-                    "path": "",
+                    "id": "6e693382-9000-4b45-a217-20810c68750c",
+                    "path": "<ValveIndexController>{LeftHand}/trackpadForce",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -962,12 +972,12 @@
                 },
                 {
                     "name": "",
-                    "id": "6e693382-9000-4b45-a217-20810c68750c",
-                    "path": "",
+                    "id": "276e2b6d-f8d8-4e39-864f-ccd847131715",
+                    "path": "<XRController>{LeftHand}/{SecondaryButton}",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Resize",
+                    "action": "Delete",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -1762,6 +1772,26 @@
                     "interactions": "",
                     "initialStateCheck": false,
                     "priority": 0
+                },
+                {
+                    "name": "Resize",
+                    "type": "Value",
+                    "id": "9e5429ee-12e9-4781-93d8-a88f912023f2",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true,
+                    "priority": 0
+                },
+                {
+                    "name": "Delete",
+                    "type": "Button",
+                    "id": "13f9712a-f112-4ed7-ba1c-87a8ec6db7c1",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
                 }
             ],
             "bindings": [
@@ -2213,6 +2243,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Spawn Ball",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d21c320c-a011-43a7-a44b-dc374789d969",
+                    "path": "<ValveIndexController>{RightHand}/trackpadForce",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Resize",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "65b3fd3d-6e5e-4ff0-9ffb-3a22ee7dac59",
+                    "path": "<XRController>{LeftHand}/{SecondaryButton}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Delete",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
