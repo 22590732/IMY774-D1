@@ -399,4 +399,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FloatingBall
   floatDuration: 4
-  floatDamping: 3
+  settleRate: 3
