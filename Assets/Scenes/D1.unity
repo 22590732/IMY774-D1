@@ -6392,6 +6392,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3904471525139099824, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -6449,9 +6453,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HandBallSpawner
   spawnAction: {fileID: 1595886424723814448, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   ballPrefab: {fileID: 4719884592182496424, guid: 8d324063999a876478f83a24e1e18f68, type: 3}
-  spawnPoint: {fileID: 0}
+  spawnPoint: {fileID: 451975140}
   cooldown: 0.25
-  bypassTutorialGate: 0
+  bypassTutorialGate: 1
 --- !u!114 &897412095
 MonoBehaviour:
   m_ObjectHideFlags: 0
