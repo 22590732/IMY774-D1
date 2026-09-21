@@ -8,6 +8,9 @@ using UnityEngine.InputSystem;
 ///
 /// Grip curls middle, ring and little. Trigger curls the index finger.
 /// Thumb touch (optional) curls the thumb.
+///
+/// The finger curl axis is worked out automatically from the bone directions and the palm normal,
+/// so you don't have to know the rig's local axes. Use Flip Curl if a hand bends backward.
 /// </summary>
 public class ControllerHandPoser : MonoBehaviour
 {
@@ -23,12 +26,17 @@ public class ControllerHandPoser : MonoBehaviour
     [Tooltip("Optional. A button action that is active while the thumb touches A, B, thumbstick or trackpad.")]
     [SerializeField] private InputActionReference thumbTouchAction;
 
-    [Header("Curl (tune these in Play mode)")]
-    [Tooltip("Local axis each finger bone rotates around to curl. Find it by rotating L_IndexProximal in the Scene view.")]
-    [SerializeField] private Vector3 fingerCurlAxis = new Vector3(0f, 0f, 1f);
-    [Tooltip("Full-curl angle for (Proximal, Intermediate, Distal) joints, in degrees. Use negative values to flip direction.")]
+    [Header("Finger curl")]
+    [Tooltip("Work out each finger's bend axis automatically. Turn off only to use the manual axis below.")]
+    [SerializeField] private bool autoFingerAxis = true;
+    [Tooltip("Tick if the fingers bend backward (away from the palm). May differ between left and right hands.")]
+    [SerializeField] private bool flipCurl = false;
+    [Tooltip("Manual axis, only used when Auto Finger Axis is off.")]
+    [SerializeField] private Vector3 manualFingerAxis = new Vector3(0f, 0f, 1f);
+    [Tooltip("Full-curl angle for (Proximal, Intermediate, Distal) joints, in degrees.")]
     [SerializeField] private Vector3 fingerAngles = new Vector3(70f, 90f, 60f);
 
+    [Header("Thumb curl (manual axis)")]
     [SerializeField] private Vector3 thumbCurlAxis = new Vector3(0f, 0f, 1f);
     [Tooltip("Full-curl angle for the thumb (Metacarpal, Proximal, Distal).")]
     [SerializeField] private Vector3 thumbAngles = new Vector3(15f, 30f, 30f);
@@ -46,10 +54,12 @@ public class ControllerHandPoser : MonoBehaviour
     {
         public Transform[] bones;
         public Quaternion[] rest;
+        public Vector3[] autoAxes;   // local-space axis per bone; zero vector = not available
         public float curl;
     }
 
     private Digit index, middle, ring, little, thumb;
+    private bool inputErrorLogged;
 
     private void Awake()
     {
@@ -58,6 +68,8 @@ public class ControllerHandPoser : MonoBehaviour
         ring   = Build("RingProximal",   "RingIntermediate",   "RingDistal");
         little = Build("LittleProximal", "LittleIntermediate", "LittleDistal");
         thumb  = Build("ThumbMetacarpal", "ThumbProximal",     "ThumbDistal");
+
+        ComputeAutoAxes();
     }
 
     private void OnEnable()
@@ -77,7 +89,8 @@ public class ControllerHandPoser : MonoBehaviour
         var d = new Digit
         {
             bones = new Transform[boneNames.Length],
-            rest = new Quaternion[boneNames.Length]
+            rest = new Quaternion[boneNames.Length],
+            autoAxes = new Vector3[boneNames.Length]
         };
 
         for (int i = 0; i < boneNames.Length; i++)
@@ -92,6 +105,41 @@ public class ControllerHandPoser : MonoBehaviour
         return d;
     }
 
+    // Bend axis = perpendicular to both the finger's direction and the palm normal.
+    // Computed once from the rest (open) pose.
+    private void ComputeAutoAxes()
+    {
+        Transform wrist = FindDeep(transform, bonePrefix + "Wrist");
+        Transform idx = index.bones[0];
+        Transform mid = middle.bones[0];
+        Transform lit = little.bones[0];
+
+        if (wrist == null || idx == null || mid == null || lit == null)
+        {
+            Debug.LogWarning($"{name}: couldn't work out the palm plane. Using the manual axis.", this);
+            return;
+        }
+
+        Vector3 forward = (mid.position - wrist.position).normalized;
+        Vector3 across = (lit.position - idx.position).normalized;
+        Vector3 palmNormal = Vector3.Cross(forward, across).normalized;
+
+        foreach (Digit d in new[] { index, middle, ring, little })
+        {
+            for (int i = 0; i < d.bones.Length; i++)
+            {
+                Transform bone = d.bones[i];
+                if (bone == null || bone.childCount == 0) continue;
+
+                Vector3 dir = (bone.GetChild(0).position - bone.position).normalized;
+                Vector3 worldAxis = Vector3.Cross(dir, palmNormal);
+                if (worldAxis.sqrMagnitude < 1e-6f) continue;
+
+                d.autoAxes[i] = bone.InverseTransformDirection(worldAxis.normalized);
+            }
+        }
+    }
+
     private static Transform FindDeep(Transform root, string boneName)
     {
         foreach (Transform t in root.GetComponentsInChildren<Transform>(true))
@@ -99,10 +147,24 @@ public class ControllerHandPoser : MonoBehaviour
         return null;
     }
 
-    private static float Read(InputActionReference r)
+    private float Read(InputActionReference r)
     {
         if (r == null || r.action == null) return 0f;
-        return r.action.ReadValue<float>();
+
+        try
+        {
+            return r.action.ReadValue<float>();
+        }
+        catch (System.InvalidOperationException)
+        {
+            if (!inputErrorLogged)
+            {
+                inputErrorLogged = true;
+                Debug.LogError($"{name}: action '{r.action.name}' is not a single-number (float or button) action. " +
+                               "Choose an analog action such as Select Value or Activate Value.", this);
+            }
+            return 0f;
+        }
     }
 
     private void LateUpdate()
@@ -124,23 +186,40 @@ public class ControllerHandPoser : MonoBehaviour
 
         float t = 1f - Mathf.Exp(-smoothing * Time.deltaTime);
 
-        Apply(index,  trigger,    t, fingerCurlAxis, fingerAngles);
-        Apply(middle, grip,       t, fingerCurlAxis, fingerAngles);
-        Apply(ring,   grip,       t, fingerCurlAxis, fingerAngles);
-        Apply(little, grip,       t, fingerCurlAxis, fingerAngles);
-        Apply(thumb,  thumbTouch, t, thumbCurlAxis,  thumbAngles);
+        ApplyFinger(index,  trigger, t);
+        ApplyFinger(middle, grip,    t);
+        ApplyFinger(ring,   grip,    t);
+        ApplyFinger(little, grip,    t);
+        ApplyThumb(thumb, thumbTouch, t);
     }
 
-    private static void Apply(Digit d, float target, float t, Vector3 axis, Vector3 angles)
+    private void ApplyFinger(Digit d, float target, float t)
     {
         d.curl = Mathf.Lerp(d.curl, target, t);
-        axis = axis.normalized;
+        float sign = flipCurl ? -1f : 1f;
 
         for (int i = 0; i < d.bones.Length; i++)
         {
             if (d.bones[i] == null) continue;
-            float angle = angles[i] * d.curl;
+
+            Vector3 axis = (autoFingerAxis && d.autoAxes[i] != Vector3.zero)
+                ? d.autoAxes[i]
+                : manualFingerAxis.normalized;
+
+            float angle = fingerAngles[i] * d.curl * sign;
             d.bones[i].localRotation = d.rest[i] * Quaternion.AngleAxis(angle, axis);
+        }
+    }
+
+    private void ApplyThumb(Digit d, float target, float t)
+    {
+        d.curl = Mathf.Lerp(d.curl, target, t);
+        Vector3 axis = thumbCurlAxis.normalized;
+
+        for (int i = 0; i < d.bones.Length; i++)
+        {
+            if (d.bones[i] == null) continue;
+            d.bones[i].localRotation = d.rest[i] * Quaternion.AngleAxis(thumbAngles[i] * d.curl, axis);
         }
     }
 }
