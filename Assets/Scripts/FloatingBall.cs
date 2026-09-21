@@ -5,21 +5,22 @@ using UnityEngine.XR.Interaction.Toolkit.Interactables;
 /// <summary>
 /// Add to the ping pong ball prefab. When BeginFloat() is called (by HandBallSpawner) the ball hovers
 /// for a few seconds so the player can grab it, then falls normally. Grabbing it ends the float immediately.
-/// Gravity is cancelled with a counter-force rather than useGravity = false, because XRGrabInteractable
-/// restores the Rigidbody's gravity flag when released and would leave a thrown ball floating forever.
+///
+/// This script never changes any Rigidbody property (gravity, damping, kinematic). XRGrabInteractable
+/// saves and restores those around a grab, so changing them here can leave the ball with wrong values
+/// after it is thrown. Instead it applies forces each physics step while floating.
 /// </summary>
 [RequireComponent(typeof(Rigidbody))]
 public class FloatingBall : MonoBehaviour
 {
     [SerializeField] private float floatDuration = 4f;
-    [Tooltip("Temporary drag while floating so the ball settles instead of drifting.")]
-    [SerializeField] private float floatDamping = 3f;
+    [Tooltip("How quickly the ball's motion settles while floating (per second). 0 = no settling.")]
+    [SerializeField] private float settleRate = 3f;
 
     private Rigidbody rb;
     private XRGrabInteractable grab;
     private bool floating;
     private float floatEndTime;
-    private float originalDamping;
 
     private void Awake()
     {
@@ -39,8 +40,6 @@ public class FloatingBall : MonoBehaviour
 
     public void BeginFloat()
     {
-        originalDamping = rb.linearDamping;
-        rb.linearDamping = floatDamping;
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
@@ -54,22 +53,20 @@ public class FloatingBall : MonoBehaviour
 
         if (Time.time >= floatEndTime)
         {
-            EndFloat();
+            floating = false;
             return;
         }
 
         // Cancel gravity.
         rb.AddForce(-Physics.gravity * rb.mass, ForceMode.Force);
+
+        // Let the ball settle instead of drifting, without touching Rigidbody damping.
+        float k = Mathf.Clamp01(settleRate * Time.fixedDeltaTime);
+        rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, Vector3.zero, k);
     }
 
     private void OnGrabbed(SelectEnterEventArgs args)
     {
-        if (floating) EndFloat();
-    }
-
-    private void EndFloat()
-    {
         floating = false;
-        rb.linearDamping = originalDamping;
     }
 }
