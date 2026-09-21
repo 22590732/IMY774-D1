@@ -485,6 +485,16 @@
                     "interactions": "",
                     "initialStateCheck": false,
                     "priority": 0
+                },
+                {
+                    "name": "Resize",
+                    "type": "Value",
+                    "id": "cea9188b-989f-4abc-b1dd-e1e119084ba9",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true,
+                    "priority": 0
                 }
             ],
             "bindings": [
@@ -936,6 +946,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Spawn Ball",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a8e29b2e-22be-4050-9675-d7f31f7e4c76",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Resize",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6e693382-9000-4b45-a217-20810c68750c",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Resize",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
