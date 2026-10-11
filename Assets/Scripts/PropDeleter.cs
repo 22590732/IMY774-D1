@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -6,7 +7,8 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 /// <summary>
 /// Put one on each controller. While B is held, a laser shows where the controller points, and any
-/// prop it touches is permanently deleted. A prop is anything with an XR Grab Interactable.
+/// prop it touches is permanently deleted. A prop is anything with an XR Grab Interactable,
+/// except objects on a Joint (doors), which are fixtures.
 ///
 /// Aim direction, in priority order: the Ray Origin you assign, else the Near-Far Interactor's own
 /// aim transform (the same ray the player already uses for far grabbing), else this object's forward.
@@ -40,6 +42,9 @@ public class PropDeleter : MonoBehaviour
     private float nextDeleteTime;
     private bool wasHeld;
     private string lastReport;
+
+    /// <summary>Raised after the laser deletes a prop (used by the tutorial).</summary>
+    public static event Action PropDeleted;
 
     private void Awake()
     {
@@ -122,7 +127,14 @@ public class PropDeleter : MonoBehaviour
         {
             end = hit.point;
             target = hit.collider.GetComponentInParent<XRGrabInteractable>();
-            report = target != null
+
+            // Doors (and anything else on a joint) are grabbable fixtures, not props: never delete them.
+            if (target != null && target.GetComponent<Joint>() != null)
+            {
+                target = null;
+                report = $"aiming at '{hit.collider.name}' (a door or fixture, can't be deleted)";
+            }
+            else report = target != null
                 ? $"aiming at prop '{target.name}'"
                 : $"aiming at '{hit.collider.name}' (not a prop, no XR Grab Interactable)";
         }
@@ -149,6 +161,7 @@ public class PropDeleter : MonoBehaviour
             if (debugLogging) Debug.Log($"{name}: deleting '{target.name}'.", this);
             Destroy(target.gameObject);
             nextDeleteTime = Time.time + repeatDelay;
+            PropDeleted?.Invoke();
         }
     }
 

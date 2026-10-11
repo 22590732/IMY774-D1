@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -21,6 +22,9 @@ public class NewCupTrigger : MonoBehaviour
     [Header("Events")]
     public UnityEvent Scored;
 
+    /// <summary>Raised when a ball lands in any cup (used by the tutorial).</summary>
+    public static event Action<NewCupTrigger> AnyScored;
+
     private void OnTriggerEnter(Collider other)
     {
         // Use the rigidbody's object so the tag can sit on the ball root even if a child collider hits.
@@ -39,5 +43,6 @@ public class NewCupTrigger : MonoBehaviour
         if (Splash != null) Splash.Play();
 
         Scored?.Invoke();
+        AnyScored?.Invoke(this);
     }
 }

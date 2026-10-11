@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -19,6 +20,9 @@ public class HandBallSpawner : MonoBehaviour
     [SerializeField] private bool bypassTutorialGate = false;
 
     private float lastSpawnTime = -999f;
+
+    /// <summary>Raised after any hand spawns a ball (used by the tutorial).</summary>
+    public static event Action<GameObject> BallSpawned;
 
     private void OnEnable()
     {
@@ -55,5 +59,7 @@ public class HandBallSpawner : MonoBehaviour
         FloatingBall floating = ball.GetComponent<FloatingBall>();
         if (floating != null)
             floating.BeginFloat();
+
+        BallSpawned?.Invoke(ball);
     }
 }

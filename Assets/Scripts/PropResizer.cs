@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
@@ -33,6 +34,12 @@ public class PropResizer : MonoBehaviour
     private bool errorLogged;
     private bool wasPressed;
     private bool loggedNoSelection;
+
+    /// <summary>
+    /// Raised when a resize gesture ends. The value is the size change during that gesture
+    /// (1 = unchanged, 2 = doubled, 0.5 = halved). Used by the tutorial.
+    /// </summary>
+    public static event Action<float> ResizeFinished;
 
     private void Reset()
     {
@@ -84,8 +91,13 @@ public class PropResizer : MonoBehaviour
                                  "is not holding anything. If you ARE holding a prop, the wrong interactor is assigned.", this);
             }
 
-            if (active != null && debugLogging)
-                Debug.Log($"{name}: resize ended at {active.CurrentMultiplier:F2}x original size.", this);
+            if (active != null)
+            {
+                if (debugLogging)
+                    Debug.Log($"{name}: resize ended at {active.CurrentMultiplier:F2}x original size.", this);
+                if (startMultiplier > 0f)
+                    ResizeFinished?.Invoke(active.CurrentMultiplier / startMultiplier);
+            }
             active = null;   // trackpad released or prop dropped: keep whatever size it has
         }
     }
@@ -93,6 +105,9 @@ public class PropResizer : MonoBehaviour
     private void Begin(IXRSelectInteractable held)
     {
         Transform prop = held.transform;
+
+        // Doors (and anything else on a joint) can be held but must never be resized.
+        if (prop.GetComponent<Joint>() != null) return;
 
         active = prop.GetComponent<ResizableProp>();
         if (active == null)

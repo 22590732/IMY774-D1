@@ -110,7 +110,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: c9864732b3287a7458e04bbf5a35e6e1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6637488198353970479}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c9864732b3287a7458e04bbf5a35e6e1, type: 3}
       insertIndex: -1
@@ -118,9 +121,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c9864732b3287a7458e04bbf5a35e6e1, type: 3}
       insertIndex: -1
       addedObject: {fileID: -8535911114211385175}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c9864732b3287a7458e04bbf5a35e6e1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 9091019504727307102}
     - targetCorrespondingSourceObject: {fileID: 8266303701520374707, guid: c9864732b3287a7458e04bbf5a35e6e1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8127573669824146599}
@@ -366,7 +366,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4279863291358223709}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 0.9
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -382,9 +382,9 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!114 &-8535911114211385175
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -459,12 +459,12 @@ MonoBehaviour:
   m_StartingInteractionStrengthFilters: []
   m_AutoFindParentInteractableInHierarchy: 0
   m_ParentInteractableObject: {fileID: 0}
-  m_AttachTransform: {fileID: 0}
+  m_AttachTransform: {fileID: 6637488198353970479}
   m_SecondaryAttachTransform: {fileID: 0}
   m_UseDynamicAttach: 1
   m_MatchAttachPosition: 1
-  m_MatchAttachRotation: 0
-  m_SnapToColliderVolume: 0
+  m_MatchAttachRotation: 1
+  m_SnapToColliderVolume: 1
   m_ReinitializeDynamicAttachEverySingleGrab: 1
   m_AttachEaseInTime: 0.15
   m_MovementType: 2
@@ -510,26 +510,11 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
-  m_FarAttachMode: 0
+  m_FarAttachMode: 2
   m_LimitLinearVelocity: 0
   m_LimitAngularVelocity: 0
   m_MaxLinearVelocityDelta: 10
   m_MaxAngularVelocityDelta: 20
---- !u!114 &9091019504727307102
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4279863291358223709}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3741711f4879dfa46acfe7abbb98bae8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlaceableProp
-  mode: 1
-  throwSpeed: 1
-  startFrozen: 1
 --- !u!1 &4977469650296601535 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8266303701520374707, guid: c9864732b3287a7458e04bbf5a35e6e1, type: 3}
@@ -719,3 +704,39 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -1524443381229846063, guid: c9864732b3287a7458e04bbf5a35e6e1, type: 3}
+--- !u!4 &8462274247795812090 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: c9864732b3287a7458e04bbf5a35e6e1, type: 3}
+  m_PrefabInstance: {fileID: 4009410025967132684}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5322401201790056913
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6637488198353970479}
+  m_Layer: 0
+  m_Name: Attach_Grip
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6637488198353970479
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5322401201790056913}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0.025}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8462274247795812090}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}

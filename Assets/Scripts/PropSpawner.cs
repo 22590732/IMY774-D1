@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
@@ -39,6 +40,10 @@ public class PropSpawner : MonoBehaviour
     private XRGrabInteractable currentGrab;
     private float emptySince;
     private readonly Collider[] overlapBuffer = new Collider[16];
+    private bool currentWasTaken;
+
+    /// <summary>Raised when a slot refills after the player took its prop (used by the tutorial).</summary>
+    public static event Action<PropSpawner> Refilled;
 
     private Transform Point => spawnPoint != null ? spawnPoint : transform;
 
@@ -88,16 +93,24 @@ public class PropSpawner : MonoBehaviour
 
     private void Spawn()
     {
+        bool refill = currentWasTaken;
+        currentWasTaken = false;
+
         current = Instantiate(propPrefab, Point.position, Point.rotation);
         currentGrab = current.GetComponentInChildren<XRGrabInteractable>();
         emptySince = -1f;
 
-        if ((unlockGateWhenGrabbed || stopAfterFirstGrab) && currentGrab != null)
+        if (currentGrab != null)
             currentGrab.selectEntered.AddListener(OnGrabbed);
+
+        if (refill)
+            Refilled?.Invoke(this);
     }
 
     private void OnGrabbed(SelectEnterEventArgs args)
     {
+        currentWasTaken = true;
+
         if (unlockGateWhenGrabbed)
             BallSpawnGate.Unlock();
 
