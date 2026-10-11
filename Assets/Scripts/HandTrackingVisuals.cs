@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.XR.Hands;
+using UnityEngine.XR.OpenXR;
 
 /// <summary>
 /// Shows tracked hand models instead of controller models (T07).
@@ -36,6 +37,9 @@ public class HandTrackingVisuals : MonoBehaviour
 
     private void Start()
     {
+        LogRuntimeSupport();
+        Invoke(nameof(LogStatusLater), 5f);
+
         XROrigin origin = FindFirstObjectByType<XROrigin>();
         if (origin == null)
         {
@@ -85,6 +89,26 @@ public class HandTrackingVisuals : MonoBehaviour
             lastLeft = leftTracked;
             lastRight = rightTracked;
         }
+    }
+
+    // One-off diagnostics: does the OpenXR runtime (SteamVR) offer hand tracking, and did Unity enable it?
+    private void LogRuntimeSupport()
+    {
+        if (!debugLogging) return;
+        const string ext = "XR_EXT_hand_tracking";
+        bool available = System.Array.IndexOf(OpenXRRuntime.GetAvailableExtensions() ?? new string[0], ext) >= 0;
+        bool enabled = OpenXRRuntime.IsExtensionEnabled(ext);
+        Debug.Log($"HandTrackingVisuals: OpenXR runtime '{OpenXRRuntime.name}' {OpenXRRuntime.version}. " +
+                  $"{ext}: offered by runtime = {available}, enabled by Unity = {enabled}.", this);
+    }
+
+    private void LogStatusLater()
+    {
+        if (!debugLogging) return;
+        SubsystemManager.GetSubsystems(Found);
+        Debug.Log($"HandTrackingVisuals (after 5 s): {Found.Count} hand subsystem(s), " +
+                  $"running = {(subsystem != null && subsystem.running)}, " +
+                  $"left tracked = {(subsystem != null && subsystem.leftHand.isTracked)}, right tracked = {(subsystem != null && subsystem.rightHand.isTracked)}.", this);
     }
 
     private static void SetControllerVisible(GameObject visual, bool visible)
