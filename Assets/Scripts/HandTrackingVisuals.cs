@@ -31,6 +31,7 @@ public class HandTrackingVisuals : MonoBehaviour
     private GameObject leftControllerVisual, rightControllerVisual;
     private bool? lastLeft, lastRight;
     private float nextSubsystemSearch;
+    private int subsystemsFound = -1;
     private static readonly List<XRHandSubsystem> Found = new List<XRHandSubsystem>();
 
     private void Start()
@@ -63,6 +64,7 @@ public class HandTrackingVisuals : MonoBehaviour
             nextSubsystemSearch = Time.unscaledTime + 1f;
             subsystem = null;
             SubsystemManager.GetSubsystems(Found);
+            subsystemsFound = Found.Count;
             foreach (XRHandSubsystem s in Found)
                 if (s.running) { subsystem = s; break; }
         }
@@ -75,7 +77,10 @@ public class HandTrackingVisuals : MonoBehaviour
 
         if (debugLogging && (leftTracked != lastLeft || rightTracked != lastRight))
         {
-            Debug.Log($"HandTrackingVisuals: hand subsystem {(subsystem != null ? "running" : "NOT running")}, " +
+            string state = subsystem != null ? "running"
+                : subsystemsFound <= 0 ? "MISSING (no hand subsystem was created: the OpenXR Hand Tracking feature isn't active, or the runtime didn't enable hand tracking)"
+                : "created but NOT running";
+            Debug.Log($"HandTrackingVisuals: hand subsystem {state}; " +
                       $"left hand {(leftTracked ? "tracked" : "not tracked")}, right hand {(rightTracked ? "tracked" : "not tracked")}.", this);
             lastLeft = leftTracked;
             lastRight = rightTracked;

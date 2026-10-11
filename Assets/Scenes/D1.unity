@@ -9869,8 +9869,8 @@ MonoBehaviour:
   selectActions:
   - XRI Left Interaction/Select
   - XRI Right Interaction/Select
-  pressPoint: 0.2
-  releasePoint: 0.08
+  pressPoint: 0.5
+  releasePoint: 0.375
   debugLogging: 1
 --- !u!4 &4114367195543388886
 Transform:

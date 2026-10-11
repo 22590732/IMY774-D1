@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit.Inputs;
@@ -23,35 +24,39 @@ public class IndexGripSelect : MonoBehaviour
     [SerializeField] private string[] selectActions = { "XRI Left Interaction/Select", "XRI Right Interaction/Select" };
 
     [Tooltip("Grip force (0-1) needed to grab.")]
-    [Range(0.05f, 1f)] [SerializeField] private float pressPoint = 0.2f;
+    [Range(0.05f, 1f)] [SerializeField] private float pressPoint = 0.5f;
     [Tooltip("Grip force (0-1) below which the object is released. Lower = harder to drop by accident, higher = easier to let go.")]
-    [Range(0f, 0.95f)] [SerializeField] private float releasePoint = 0.08f;
+    [Range(0f, 0.95f)] [SerializeField] private float releasePoint = 0.375f;
 
     [SerializeField] private bool debugLogging = true;
 
     private const string GenericGripUsage = "{GripButton}";
     private const string IndexLayout = "ValveIndexController";
 
+    [Tooltip("Seconds without any Index controller before the default binding is restored. " +
+             "Stops a controller that drops out for a moment (sleep, tracking loss) from switching the grip back and forth.")]
+    [SerializeField] private float restoreDelay = 3f;
+
     private readonly List<(InputAction action, int bindingIndex)> overridden = new List<(InputAction, int)>();
+    private float nextCheck;
+    private float noIndexSince = -1f;
 
     private void OnEnable()
     {
         HysteresisPressInteraction.Register();
-        InputSystem.onDeviceChange += OnDeviceChange;
         Refresh();
     }
 
     private void OnDisable()
     {
-        InputSystem.onDeviceChange -= OnDeviceChange;
         RemoveOverrides();
     }
 
-    private void OnDeviceChange(InputDevice device, InputDeviceChange change)
+    private void Update()
     {
-        if (change == InputDeviceChange.Added || change == InputDeviceChange.Removed ||
-            change == InputDeviceChange.Reconnected || change == InputDeviceChange.Disconnected)
-            Refresh();
+        if (Time.unscaledTime < nextCheck) return;
+        nextCheck = Time.unscaledTime + 0.5f;
+        Refresh();
     }
 
     private static bool IndexConnected()
@@ -64,9 +69,16 @@ public class IndexGripSelect : MonoBehaviour
 
     private void Refresh()
     {
-        bool index = IndexConnected();
-        if (index && overridden.Count == 0) ApplyOverrides();
-        else if (!index && overridden.Count > 0) RemoveOverrides();
+        if (IndexConnected())
+        {
+            noIndexSince = -1f;
+            if (overridden.Count == 0) ApplyOverrides();
+            return;
+        }
+
+        if (overridden.Count == 0) return;
+        if (noIndexSince < 0f) noIndexSince = Time.unscaledTime;
+        else if (Time.unscaledTime - noIndexSince >= restoreDelay) RemoveOverrides();
     }
 
     private IEnumerable<InputActionAsset> Assets()
@@ -85,7 +97,9 @@ public class IndexGripSelect : MonoBehaviour
 
     private void ApplyOverrides()
     {
-        string interaction = $"{HysteresisPressInteraction.Name}(pressPoint={pressPoint},releasePoint={releasePoint})";
+        // Invariant culture: on PCs whose decimal separator is a comma, "0,2" would split the parameter list.
+        string interaction = string.Format(CultureInfo.InvariantCulture, "{0}(pressPoint={1},releasePoint={2})",
+                                           HysteresisPressInteraction.Name, pressPoint, releasePoint);
 
         foreach (InputActionAsset asset in Assets())
         {
@@ -123,7 +137,7 @@ public class IndexGripSelect : MonoBehaviour
             if (action != null) action.RemoveBindingOverride(i);
 
         if (debugLogging && overridden.Count > 0)
-            Debug.Log("IndexGripSelect: no Index controller connected, restored the default grip binding.", this);
+            Debug.Log($"IndexGripSelect: no Index controller for {restoreDelay:0} s, restored the default grip binding.", this);
         overridden.Clear();
     }
 }
