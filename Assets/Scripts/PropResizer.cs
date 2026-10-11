@@ -107,7 +107,7 @@ public class PropResizer : MonoBehaviour
         Transform prop = held.transform;
 
         // Doors (and anything else on a joint) can be held but must never be resized.
-        if (prop.GetComponent<Joint>() != null) return;
+        if (prop.GetComponent<Joint>() != null || prop.GetComponent<HingedDoor>() != null) return;
 
         active = prop.GetComponent<ResizableProp>();
         if (active == null)
