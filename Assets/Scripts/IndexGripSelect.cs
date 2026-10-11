@@ -49,7 +49,10 @@ public class IndexGripSelect : MonoBehaviour
 
     private void OnDisable()
     {
+        bool log = debugLogging;
+        debugLogging = false;      // leaving Play mode: restore quietly
         RemoveOverrides();
+        debugLogging = log;
     }
 
     private void Update()

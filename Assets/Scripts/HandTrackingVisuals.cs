@@ -26,11 +26,31 @@ public class HandTrackingVisuals : MonoBehaviour
     [SerializeField] private string rightControllerVisualName = "Right Controller Visual";
     [Tooltip("Show a controller model again whenever its hand isn't tracked.")]
     [SerializeField] private bool fallBackToControllers = true;
+    [Tooltip("Seconds a hand must be steadily tracked before its controller model is hidden.")]
+    [SerializeField] private float trackedDelay = 0.25f;
+    [Tooltip("Seconds a hand must be lost before its controller model is shown again. Stops flicker when tracking drops for a moment.")]
+    [SerializeField] private float lostDelay = 0.75f;
     [SerializeField] private bool debugLogging = true;
 
     private XRHandSubsystem subsystem;
     private GameObject leftControllerVisual, rightControllerVisual;
     private bool? lastLeft, lastRight;
+    private readonly Debounce leftState = new Debounce();
+    private readonly Debounce rightState = new Debounce();
+
+    // Turns a flickering raw "is tracked" into a steady value.
+    private class Debounce
+    {
+        public bool Value;
+        private bool candidate;
+        private float since;
+        public bool Update(bool raw, float now, float onDelay, float offDelay)
+        {
+            if (raw != candidate) { candidate = raw; since = now; }
+            if (candidate != Value && now - since >= (candidate ? onDelay : offDelay)) Value = candidate;
+            return Value;
+        }
+    }
     private float nextSubsystemSearch;
     private int subsystemsFound = -1;
     private static readonly List<XRHandSubsystem> Found = new List<XRHandSubsystem>();
@@ -38,7 +58,6 @@ public class HandTrackingVisuals : MonoBehaviour
     private void Start()
     {
         LogRuntimeSupport();
-        Invoke(nameof(LogStatusLater), 5f);
 
         XROrigin origin = FindFirstObjectByType<XROrigin>();
         if (origin == null)
@@ -73,8 +92,9 @@ public class HandTrackingVisuals : MonoBehaviour
                 if (s.running) { subsystem = s; break; }
         }
 
-        bool leftTracked = subsystem != null && subsystem.running && subsystem.leftHand.isTracked;
-        bool rightTracked = subsystem != null && subsystem.running && subsystem.rightHand.isTracked;
+        float now = Time.unscaledTime;
+        bool leftTracked = leftState.Update(subsystem != null && subsystem.running && subsystem.leftHand.isTracked, now, trackedDelay, lostDelay);
+        bool rightTracked = rightState.Update(subsystem != null && subsystem.running && subsystem.rightHand.isTracked, now, trackedDelay, lostDelay);
 
         SetControllerVisible(leftControllerVisual, fallBackToControllers && !leftTracked);
         SetControllerVisible(rightControllerVisual, fallBackToControllers && !rightTracked);
@@ -102,14 +122,6 @@ public class HandTrackingVisuals : MonoBehaviour
                   $"{ext}: offered by runtime = {available}, enabled by Unity = {enabled}.", this);
     }
 
-    private void LogStatusLater()
-    {
-        if (!debugLogging) return;
-        SubsystemManager.GetSubsystems(Found);
-        Debug.Log($"HandTrackingVisuals (after 5 s): {Found.Count} hand subsystem(s), " +
-                  $"running = {(subsystem != null && subsystem.running)}, " +
-                  $"left tracked = {(subsystem != null && subsystem.leftHand.isTracked)}, right tracked = {(subsystem != null && subsystem.rightHand.isTracked)}.", this);
-    }
 
     private static void SetControllerVisible(GameObject visual, bool visible)
     {
