@@ -70,7 +70,12 @@ public class TutorialManager : MonoBehaviour
     [Header("Panel")]
     [Tooltip("Optional. Use your own text instead of the panel this script builds.")]
     [SerializeField] private TMP_Text textOverride;
+    [Tooltip("Optional. Fix the panel to this point (e.g. on a wall). Its blue Z arrow must point INTO the wall. " +
+             "Leave empty to float the panel in front of the player.")]
+    [SerializeField] private Transform wallAnchor;
+    [Tooltip("Floating panel only: distance in front of the head.")]
     [SerializeField] private float panelDistance = 1.2f;
+    [Tooltip("Floating panel only: height relative to the head.")]
     [SerializeField] private float panelHeightOffset = -0.25f;
     [SerializeField] private float panelWidth = 0.9f;
     [SerializeField] private float panelHeight = 0.3f;
@@ -411,6 +416,15 @@ public class TutorialManager : MonoBehaviour
         bodyText.fontSizeMax = body;
         hintText = MakeText("Hint", 0.03f, 0.2f, body * 0.5f, new Color(0.75f, 0.75f, 0.75f, 1f), FontStyles.Italic);
         hintText.text = DefaultHint;
+
+        if (wallAnchor != null)
+        {
+            // Fixed to the wall: no following.
+            panelRoot.transform.SetParent(wallAnchor, false);
+            panelRoot.transform.localPosition = Vector3.zero;
+            panelRoot.transform.localRotation = Quaternion.identity;
+            return;
+        }
 
         Camera cam = Camera.main;
         if (cam != null)

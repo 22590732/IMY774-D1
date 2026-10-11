@@ -9760,7 +9760,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 9.0, y: 0.2, z: 2.5}
+  m_Size: {x: 9.0, y: 0.16, z: 2.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5187553949943006567
 GameObject:
@@ -9813,7 +9813,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 5.6, y: 0.2, z: 1.0}
+  m_Size: {x: 5.6, y: 0.16, z: 1.0}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &287364127676752043
 GameObject:
@@ -9866,7 +9866,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.9, y: 0.2, z: 2.5}
+  m_Size: {x: 0.9, y: 0.16, z: 2.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &941107765495781657
 GameObject:
@@ -9919,7 +9919,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.1, y: 0.2, z: 1.1}
+  m_Size: {x: 1.1, y: 0.16, z: 1.1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6785310971367562239
 GameObject:
@@ -10036,8 +10036,8 @@ MonoBehaviour:
   selectActions:
   - XRI Left Interaction/Select
   - XRI Right Interaction/Select
-  pressPoint: 0.3
-  releasePoint: 0.1
+  pressPoint: 0.2
+  releasePoint: 0.08
   debugLogging: 1
 --- !u!1 &6426647750051772782
 GameObject:
@@ -10264,6 +10264,11 @@ MonoBehaviour:
   musicDuckFactor: 0.35
   reminderDelay: 15
   reminderRepeat: 20
+  textOverride: {fileID: 0}
+  wallAnchor: {fileID: 8593598414891144012}
+  panelWidth: 1.3
+  panelHeight: 0.45
+  textHeight: 0.065
 --- !u!1 &5878197997736227320
 GameObject:
   m_ObjectHideFlags: 0
@@ -12135,6 +12140,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.834, y: 0.05, z: 2.057}
   m_Center: {x: -0.42, y: -0.025, z: 1.0385}
+--- !u!1 &3577680421066613802
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8593598414891144012}
+  m_Layer: 0
+  m_Name: Tutorial Wall Anchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8593598414891144012
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3577680421066613802}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 2.285, y: 1.7, z: -3.65}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -12170,3 +12206,4 @@ SceneRoots:
   - {fileID: 4439022825719730534}
   - {fileID: 8990024821580381112}
   - {fileID: 5079159199621395412}
+  - {fileID: 8593598414891144012}
