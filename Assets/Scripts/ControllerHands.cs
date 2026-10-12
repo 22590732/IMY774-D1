@@ -61,10 +61,10 @@ public class ControllerHands : MonoBehaviour
     [SerializeField] private bool hideControllerModels = true;
 
     [Header("Placement: wrist relative to the controller grip pose (m / degrees)")]
-    [SerializeField] private Vector3 leftWristPosition = new Vector3(-0.0068f, 0.0856f, 0f);
-    [SerializeField] private Vector3 leftWristRotation = new Vector3(90f, -90f, 0f);
-    [SerializeField] private Vector3 rightWristPosition = new Vector3(0.0068f, 0.0856f, 0f);
-    [SerializeField] private Vector3 rightWristRotation = new Vector3(90f, -90f, 180f);
+    [SerializeField] private Vector3 leftWristPosition = new Vector3(-0.0856f, -0.0068f, 0f);
+    [SerializeField] private Vector3 leftWristRotation = new Vector3(0f, 90f, 180f);
+    [SerializeField] private Vector3 rightWristPosition = new Vector3(0.0856f, -0.0068f, 0f);
+    [SerializeField] private Vector3 rightWristRotation = new Vector3(0f, -90f, 180f);
 
     [Header("Fingers")]
     [Tooltip("How quickly fingers follow the input. Higher = snappier.")]

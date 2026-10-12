@@ -12134,10 +12134,10 @@ MonoBehaviour:
   leftControllerVisualName: Left Controller Visual
   rightControllerVisualName: Right Controller Visual
   hideControllerModels: 1
-  leftWristPosition: {x: -0.0068, y: 0.0856, z: 0}
-  leftWristRotation: {x: 90, y: -90, z: 0}
-  rightWristPosition: {x: 0.0068, y: 0.0856, z: 0}
-  rightWristRotation: {x: 90, y: -90, z: 180}
+  leftWristPosition: {x: -0.0856, y: -0.0068, z: 0}
+  leftWristRotation: {x: 0, y: 90, z: 180}
+  rightWristPosition: {x: 0.0856, y: -0.0068, z: 0}
+  rightWristRotation: {x: 0, y: -90, z: 180}
   smoothing: 20
   curls:
   - bone: IndexProximal
