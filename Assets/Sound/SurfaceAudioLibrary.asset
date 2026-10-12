@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c511562fc88b1b94ea48da09d0f6bb5f, type: 3}
+  m_Name: SurfaceAudioLibrary
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceAudioLibrary
+  entries:
+  - surface: 1
+    clips:
+    - {fileID: 8300000, guid: 0da035c724e9f4c48906f5626b32fdde, type: 3}
+    - {fileID: 8300000, guid: f186d5c9de10e9d46b05f853d416b042, type: 3}
+    - {fileID: 8300000, guid: 1deec217d3632e64abf7a1c37b23d629, type: 3}
+    - {fileID: 8300000, guid: 2c324fb528e9a08459d435166c3754a7, type: 3}
+    layerVolume: 0.7
+    bouncePitch: 0.97
+    bounceVolume: 1
+  - surface: 2
+    clips:
+    - {fileID: 8300000, guid: b02e69350a0cfdf479ebb1f3f585763e, type: 3}
+    - {fileID: 8300000, guid: 20b87a4cba63fea4eb4d5ffe5a1e8de7, type: 3}
+    - {fileID: 8300000, guid: f882b8af19a4d11408a63c9864e6d326, type: 3}
+    - {fileID: 8300000, guid: af26306d732591c40845727c3a0f452c, type: 3}
+    layerVolume: 0.55
+    bouncePitch: 1.03
+    bounceVolume: 0.9
+  - surface: 3
+    clips:
+    - {fileID: 8300000, guid: 0f5c3f0806e643b4d831bf624c1c295c, type: 3}
+    - {fileID: 8300000, guid: 74486d97bfe26d249837a7e1ff8ed914, type: 3}
+    - {fileID: 8300000, guid: b3337736d3125484f9db0f3328b49b81, type: 3}
+    - {fileID: 8300000, guid: 2526a8cb7678a4646a6a388cabce4fa3, type: 3}
+    layerVolume: 0.6
+    bouncePitch: 1.05
+    bounceVolume: 0.9
+  - surface: 4
+    clips:
+    - {fileID: 8300000, guid: b9ee91aa1466db844a77114f02c52748, type: 3}
+    - {fileID: 8300000, guid: 2d3ad1085d31c2748abe6ca3f0dd4dc3, type: 3}
+    - {fileID: 8300000, guid: 6aae1fed5ff48c041bd33c4874d663ab, type: 3}
+    - {fileID: 8300000, guid: f72cfd9d776f13f4bbc883ba2e5c3532, type: 3}
+    layerVolume: 0.5
+    bouncePitch: 1.08
+    bounceVolume: 0.85
+  - surface: 5
+    clips:
+    - {fileID: 8300000, guid: 07c8f84685991d04598d1f85f25d506d, type: 3}
+    - {fileID: 8300000, guid: bb2387b436fb9cc48b2a79bc345becb7, type: 3}
+    - {fileID: 8300000, guid: 9db1c3c8e478d2f42b3c95ba55a3f993, type: 3}
+    - {fileID: 8300000, guid: f92af80d8337ce54b8159d351153a8a8, type: 3}
+    layerVolume: 0.55
+    bouncePitch: 1.04
+    bounceVolume: 0.9
+  - surface: 6
+    clips:
+    - {fileID: 8300000, guid: 5e152d1270430b94a82b6ad36316f344, type: 3}
+    - {fileID: 8300000, guid: 3e1a64abd6609f54b8079773435db628, type: 3}
+    - {fileID: 8300000, guid: d9daf354c78c724499a45e1562083db7, type: 3}
+    - {fileID: 8300000, guid: d0fe112d8c46f2147a7ed37d97e2439f, type: 3}
+    layerVolume: 0.65
+    bouncePitch: 1.06
+    bounceVolume: 1
+  - surface: 7
+    clips:
+    - {fileID: 8300000, guid: 3fcc023ee4f669449b1a21edcff7ee46, type: 3}
+    - {fileID: 8300000, guid: ac4d407770a1bbf419c42d288ecd4128, type: 3}
+    - {fileID: 8300000, guid: ed5dcfd9bb61bf448b8e85057066b162, type: 3}
+    - {fileID: 8300000, guid: 42da4af4b93df8c408007a574c84e9ff, type: 3}
+    layerVolume: 0.8
+    bouncePitch: 0.8
+    bounceVolume: 0.25
+  - surface: 8
+    clips:
+    - {fileID: 8300000, guid: acbf22c721757024ebd21b61a2c874f2, type: 3}
+    - {fileID: 8300000, guid: 7182b7cba00762540b7a9ae625bf3778, type: 3}
+    - {fileID: 8300000, guid: 9670ae94fd299d941a1ef11bdd23312a, type: 3}
+    - {fileID: 8300000, guid: 1002ee4286f8e52409dd18a5a08be9b9, type: 3}
+    layerVolume: 0.6
+    bouncePitch: 0.95
+    bounceVolume: 0.9

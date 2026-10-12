@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8635052577649002566
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5952433456643699245}
+  m_Layer: 0
+  m_Name: Attach_Grip
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5952433456643699245
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8635052577649002566}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8871037562341005112}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1001 &8977636500833759443
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -68,6 +99,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b3c59c9b75cd9f34a89645f0b56b59a7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 689131342252950041}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b3c59c9b75cd9f34a89645f0b56b59a7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1557112765613556003}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b3c59c9b75cd9f34a89645f0b56b59a7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5925971488737222117}
   m_SourcePrefab: {fileID: 100100000, guid: b3c59c9b75cd9f34a89645f0b56b59a7, type: 3}
 --- !u!1 &8095098306399292802 stripped
 GameObject:
@@ -252,39 +289,42 @@ MonoBehaviour:
   m_LimitAngularVelocity: 0
   m_MaxLinearVelocityDelta: 10
   m_MaxAngularVelocityDelta: 20
---- !u!4 &7832059351663274819 stripped
+--- !u!114 &1557112765613556003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8095098306399292802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e59e8eb89f118fc4ba81e5216df32d81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceMaterial
+  surface: 3
+--- !u!114 &5925971488737222117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8095098306399292802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 109ad9f62963ece4bb45d3eb5179566b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PropImpactAudio
+  surfaces: {fileID: 11400000, guid: 84ab97b43579187478450a036a3fcaaa, type: 2}
+  impactAudioPrefab: {fileID: 6049420246904017014, guid: b70761c12e9d9064a89cffd32b615a9f, type: 3}
+  minImpactSpeed: 0.12
+  fullVolumeSpeed: 3
+  maxVolume: 0.8
+  otherSurfaceVolume: 0.5
+  basePitch: 0.85
+  minInterval: 0.08
+  quietAfterSpawn: 0.75
+--- !u!4 &8871037562341005112 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: b3c59c9b75cd9f34a89645f0b56b59a7, type: 3}
   m_PrefabInstance: {fileID: 8977636500833759443}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &8635052577649002566
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5952433456643699245}
-  m_Layer: 0
-  m_Name: Attach_Grip
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5952433456643699245
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8635052577649002566}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0.1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7832059351663274819}
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}

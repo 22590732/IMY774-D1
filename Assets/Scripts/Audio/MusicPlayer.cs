@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -18,18 +19,21 @@ public class MusicPlayer : MonoBehaviour
     [HideInInspector] public float Duck = 1f;
 
     public float Volume { get => volume; set => volume = Mathf.Clamp01(value); }
+    public AudioClip CurrentTrack => a != null ? a.clip : null;
 
-    private AudioSource a, b;          // current and next, swapped on each crossfade
-    private float fade = 1f;           // 0 -> 1 while crossfading from b (old) to a (new)
+    private AudioSource a, b;          // a = current track, b = the one fading out
+    private float fade = 1f;           // 0 -> 1 while crossfading from b to a
     private int current = -1;
+    private float startedAt;
+    private readonly List<int> valid = new List<int>();
 
     private void Awake()
     {
-        a = MakeSource("Music A");
-        b = MakeSource("Music B");
+        a = MakeSource();
+        b = MakeSource();
     }
 
-    private AudioSource MakeSource(string n)
+    private AudioSource MakeSource()
     {
         AudioSource s = gameObject.AddComponent<AudioSource>();
         s.playOnAwake = false;
@@ -43,46 +47,58 @@ public class MusicPlayer : MonoBehaviour
 
     private void Start()
     {
+        valid.Clear();
+        for (int i = 0; i < tracks.Length; i++)
+            if (tracks[i] != null) valid.Add(i);
+
+        if (valid.Count == 0)
+        {
+            Debug.LogWarning($"[MusicPlayer] '{name}' has no music tracks assigned, so no music will play. " +
+                             "Put tracks in Assets/Sound/Music and run Tools > Ping Pong > Set Up Audio (T14).", this);
+            enabled = false;
+            return;
+        }
         if (playOnStart) PlayNext();
     }
 
     private void Update()
     {
-        if (tracks == null || tracks.Length == 0 || current < 0) return;
+        if (current < 0 || a.clip == null) return;
 
         if (fade < 1f) fade = Mathf.Min(1f, fade + Time.unscaledDeltaTime / Mathf.Max(0.01f, crossfadeSeconds));
         float v = volume * Duck;
         a.volume = v * fade;
         b.volume = v * (1f - fade);
         if (fade >= 1f && b.isPlaying) b.Stop();
+        if (fade < 1f) return;
 
         // Start the next track so it fades in while this one ends.
-        if (a.clip != null && a.isPlaying && a.time >= a.clip.length - crossfadeSeconds && fade >= 1f)
-            PlayNext();
-        else if (!a.isPlaying && fade >= 1f)
-            PlayNext();     // e.g. very short track, or audio was interrupted
+        bool nearEnd = a.isPlaying && a.time >= a.clip.length - crossfadeSeconds;
+        // Finished (or failed to load). Ignored for the first second, while a streamed track starts,
+        // and while the app is unfocused (headset off), when audio may be paused.
+        bool stopped = !a.isPlaying && Application.isFocused && Time.unscaledTime - startedAt > 1f;
+        if (nearEnd || stopped) PlayNext();
     }
 
     /// <summary>Crossfades to the next track.</summary>
     public void PlayNext()
     {
-        if (tracks == null || tracks.Length == 0) return;
-        int next;
-        if (tracks.Length == 1) next = 0;
+        if (valid.Count == 0) return;
+        int pick;
+        if (valid.Count == 1) pick = valid[0];
         else if (shuffle)
         {
-            next = Random.Range(0, tracks.Length - 1);
-            if (current >= 0 && next >= current) next++;
+            do pick = valid[Random.Range(0, valid.Count)]; while (pick == current);
         }
-        else next = (current + 1) % tracks.Length;
-        current = next;
+        else pick = valid[(valid.IndexOf(current) + 1) % valid.Count];
+        current = pick;
 
-        // swap: the old track goes to b and fades out, the new one starts on a
+        // swap: the old track moves to b and fades out, the new one starts on a
         (a, b) = (b, a);
         a.clip = tracks[current];
-        a.time = 0f;
         a.volume = 0f;
         a.Play();
-        fade = b.isPlaying ? 0f : 0.999f;   // nothing to fade from on the first track: start (almost) at full
+        startedAt = Time.unscaledTime;
+        fade = b.isPlaying ? 0f : 0.999f;   // first track: nothing to fade from, start (almost) at full
     }
 }

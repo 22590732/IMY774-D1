@@ -290,6 +290,9 @@ MonoBehaviour:
   bounceClip: {fileID: 8300000, guid: 03007f79bb4286245b43b55179746288, type: 3}
   impactAudioPrefab: {fileID: 6049420246904017014, guid: b70761c12e9d9064a89cffd32b615a9f, type: 3}
   minImpactSpeed: 0.2
+  surfaces: {fileID: 11400000, guid: 84ab97b43579187478450a036a3fcaaa, type: 2}
+  fullVolumeSpeed: 5
+  minInterval: 0.03
 --- !u!82 &2262803475316668951
 AudioSource:
   m_ObjectHideFlags: 0

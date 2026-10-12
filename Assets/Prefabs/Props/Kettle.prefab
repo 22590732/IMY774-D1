@@ -99,6 +99,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 50a0539372137e2439a15812feec2826, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1794630467661652882}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 50a0539372137e2439a15812feec2826, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 494725786824033031}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 50a0539372137e2439a15812feec2826, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4601918597917456443}
   m_SourcePrefab: {fileID: 100100000, guid: 50a0539372137e2439a15812feec2826, type: 3}
 --- !u!4 &7230993459528679015 stripped
 Transform:
@@ -288,3 +294,37 @@ MonoBehaviour:
   m_LimitAngularVelocity: 0
   m_MaxLinearVelocityDelta: 10
   m_MaxAngularVelocityDelta: 20
+--- !u!114 &494725786824033031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8003589856872719581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e59e8eb89f118fc4ba81e5216df32d81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceMaterial
+  surface: 2
+--- !u!114 &4601918597917456443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8003589856872719581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 109ad9f62963ece4bb45d3eb5179566b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PropImpactAudio
+  surfaces: {fileID: 11400000, guid: 84ab97b43579187478450a036a3fcaaa, type: 2}
+  impactAudioPrefab: {fileID: 6049420246904017014, guid: b70761c12e9d9064a89cffd32b615a9f, type: 3}
+  minImpactSpeed: 0.12
+  fullVolumeSpeed: 3
+  maxVolume: 0.8
+  otherSurfaceVolume: 0.5
+  basePitch: 0.8
+  minInterval: 0.08
+  quietAfterSpawn: 0.75
