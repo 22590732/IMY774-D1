@@ -12134,13 +12134,13 @@ MonoBehaviour:
   leftControllerVisualName: Left Controller Visual
   rightControllerVisualName: Right Controller Visual
   hideControllerModels: 1
-  leftWristPosition: {x: -0.025, y: -0.0206, z: -0.1408}
+  leftWristPosition: {x: -0.025, y: 0.0294, z: -0.0808}
   leftWristRotation: {x: 20, y: 0, z: 90}
-  rightWristPosition: {x: 0.025, y: -0.0206, z: -0.1408}
+  rightWristPosition: {x: 0.025, y: 0.0294, z: -0.0808}
   rightWristRotation: {x: 20, y: 0, z: -90}
-  otherLeftWristPosition: {x: -0.025, y: -0.0206, z: -0.1408}
+  otherLeftWristPosition: {x: -0.025, y: 0.0294, z: -0.0808}
   otherLeftWristRotation: {x: 20, y: 0, z: 90}
-  otherRightWristPosition: {x: 0.025, y: -0.0206, z: -0.1408}
+  otherRightWristPosition: {x: 0.025, y: 0.0294, z: -0.0808}
   otherRightWristRotation: {x: 20, y: 0, z: -90}
   calibrateKey: 17
   calibrateDelay: 3

@@ -20,8 +20,8 @@ using UnityEngine.InputSystem;
 /// Placement: the wrist is put at Wrist Position / Wrist Rotation relative to the controller transform.
 /// In the XRI Starter rig that transform follows the AIM pose (pointerPosition/Rotation, with the grip
 /// pose only as a fallback): +Z is the pointing direction, +Y up, +X right, origin at the controller tip.
-/// The defaults put the fingers forward (20 degrees down), palm facing inward, thumb up, fist around the
-/// handle. Fine-tune with calibration (C key in Play mode) or by editing the fields live.
+/// The defaults put the fingers forward (20 degrees down), palm facing inward, thumb up, with the centre
+/// of the fist on the base of the ray (where the Near-Far Interactor holds objects). Fine-tune with calibration (C key in Play mode) or by editing the fields live.
 ///
 /// Calibration: in Play mode, hold both controllers naturally in front of you (as if holding two
 /// torches pointing forward, thumbs on top) and press C on the keyboard, or use the component's
@@ -70,15 +70,15 @@ public class ControllerHands : MonoBehaviour
     [SerializeField] private bool hideControllerModels = true;
 
     [Header("Placement with Valve Index controllers: wrist relative to the controller (aim pose), m / degrees")]
-    [SerializeField] private Vector3 leftWristPosition = new Vector3(-0.025f, -0.0206f, -0.1408f);
+    [SerializeField] private Vector3 leftWristPosition = new Vector3(-0.025f, 0.0294f, -0.0808f);
     [SerializeField] private Vector3 leftWristRotation = new Vector3(20f, 0f, 90f);
-    [SerializeField] private Vector3 rightWristPosition = new Vector3(0.025f, -0.0206f, -0.1408f);
+    [SerializeField] private Vector3 rightWristPosition = new Vector3(0.025f, 0.0294f, -0.0808f);
     [SerializeField] private Vector3 rightWristRotation = new Vector3(20f, 0f, -90f);
 
     [Header("Placement with other controllers (e.g. Vive wands)")]
-    [SerializeField] private Vector3 otherLeftWristPosition = new Vector3(-0.025f, -0.0206f, -0.1408f);
+    [SerializeField] private Vector3 otherLeftWristPosition = new Vector3(-0.025f, 0.0294f, -0.0808f);
     [SerializeField] private Vector3 otherLeftWristRotation = new Vector3(20f, 0f, 90f);
-    [SerializeField] private Vector3 otherRightWristPosition = new Vector3(0.025f, -0.0206f, -0.1408f);
+    [SerializeField] private Vector3 otherRightWristPosition = new Vector3(0.025f, 0.0294f, -0.0808f);
     [SerializeField] private Vector3 otherRightWristRotation = new Vector3(20f, 0f, -90f);
 
     [Header("Calibration")]
@@ -88,9 +88,9 @@ public class ControllerHands : MonoBehaviour
     [SerializeField] private float calibrateDelay = 3f;
     [Tooltip("How far the back of the hand tilts up from facing straight outwards, in degrees.")]
     [SerializeField] private float calibrateDorsalTilt = 20f;
-    [Tooltip("Centre of the controller handle relative to the controller transform. The XRI rig tracks the aim pose, " +
-             "whose origin is at the controller tip, so the handle is a little below and behind it.")]
-    [SerializeField] private Vector3 handleOffset = new Vector3(0f, -0.05f, -0.06f);
+    [Tooltip("Where the centre of the fist goes, relative to the controller transform. Zero = on the base of the ray, " +
+             "which is also where grabbed objects attach.")]
+    [SerializeField] private Vector3 handleOffset = Vector3.zero;
 
     [Header("Fingers")]
     [Tooltip("How quickly fingers follow the input. Higher = snappier.")]
