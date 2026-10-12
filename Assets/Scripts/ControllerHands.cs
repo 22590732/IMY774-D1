@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.XR.CoreUtils;
 using UnityEngine;
@@ -16,9 +17,17 @@ using UnityEngine.InputSystem;
 /// on top of the model's rest pose. The angles were worked out from the XR Hands sample rig and
 /// checked visually so the fist wraps a controller handle.
 ///
-/// Placement: the wrist is put at Wrist Position / Wrist Rotation relative to the controller's grip
-/// pose. These can be adjusted live in Play mode (copy the component, exit Play mode, then
-/// Paste Component Values to keep them).
+/// Placement: the wrist is put at Wrist Position / Wrist Rotation relative to the controller transform.
+/// In the XRI Starter rig that transform follows the AIM pose (pointerPosition/Rotation, with the grip
+/// pose only as a fallback): +Z is the pointing direction, +Y up, +X right, origin at the controller tip.
+/// The defaults put the fingers forward (20 degrees down), palm facing inward, thumb up, fist around the
+/// handle. Fine-tune with calibration (C key in Play mode) or by editing the fields live.
+///
+/// Calibration: in Play mode, hold both controllers naturally in front of you (as if holding two
+/// torches pointing forward, thumbs on top) and press C on the keyboard, or use the component's
+/// menu (three dots) > "Calibrate hands in 3 seconds". After the countdown the hands are fitted to the
+/// controllers and the values are printed in the Console. Copy them into the fields after leaving
+/// Play mode (or Copy Component in Play mode, then Paste Component Values after).
 ///
 /// Grabbing is unchanged: the interactors stay on the controllers. Only the visuals change.
 /// </summary>
@@ -60,11 +69,28 @@ public class ControllerHands : MonoBehaviour
     [SerializeField] private string rightControllerVisualName = "Right Controller Visual";
     [SerializeField] private bool hideControllerModels = true;
 
-    [Header("Placement: wrist relative to the controller grip pose (m / degrees)")]
-    [SerializeField] private Vector3 leftWristPosition = new Vector3(-0.0856f, -0.0068f, 0f);
-    [SerializeField] private Vector3 leftWristRotation = new Vector3(0f, 90f, 180f);
-    [SerializeField] private Vector3 rightWristPosition = new Vector3(0.0856f, -0.0068f, 0f);
-    [SerializeField] private Vector3 rightWristRotation = new Vector3(0f, -90f, 180f);
+    [Header("Placement with Valve Index controllers: wrist relative to the controller (aim pose), m / degrees")]
+    [SerializeField] private Vector3 leftWristPosition = new Vector3(-0.025f, -0.0206f, -0.1408f);
+    [SerializeField] private Vector3 leftWristRotation = new Vector3(20f, 0f, 90f);
+    [SerializeField] private Vector3 rightWristPosition = new Vector3(0.025f, -0.0206f, -0.1408f);
+    [SerializeField] private Vector3 rightWristRotation = new Vector3(20f, 0f, -90f);
+
+    [Header("Placement with other controllers (e.g. Vive wands)")]
+    [SerializeField] private Vector3 otherLeftWristPosition = new Vector3(-0.025f, -0.0206f, -0.1408f);
+    [SerializeField] private Vector3 otherLeftWristRotation = new Vector3(20f, 0f, 90f);
+    [SerializeField] private Vector3 otherRightWristPosition = new Vector3(0.025f, -0.0206f, -0.1408f);
+    [SerializeField] private Vector3 otherRightWristRotation = new Vector3(20f, 0f, -90f);
+
+    [Header("Calibration")]
+    [Tooltip("Keyboard key that starts calibration in Play mode.")]
+    [SerializeField] private Key calibrateKey = Key.C;
+    [Tooltip("Seconds between pressing the key and taking the measurement, to get your hands in position.")]
+    [SerializeField] private float calibrateDelay = 3f;
+    [Tooltip("How far the back of the hand tilts up from facing straight outwards, in degrees.")]
+    [SerializeField] private float calibrateDorsalTilt = 20f;
+    [Tooltip("Centre of the controller handle relative to the controller transform. The XRI rig tracks the aim pose, " +
+             "whose origin is at the controller tip, so the handle is a little below and behind it.")]
+    [SerializeField] private Vector3 handleOffset = new Vector3(0f, -0.05f, -0.06f);
 
     [Header("Fingers")]
     [Tooltip("How quickly fingers follow the input. Higher = snappier.")]
@@ -82,6 +108,15 @@ public class ControllerHands : MonoBehaviour
     }
 
     private HandRig left, right;
+    private bool calibrating;
+
+    /// <summary>True when a Valve Index controller is connected (selects the placement set).</summary>
+    private static bool IndexConnected()
+    {
+        foreach (InputDevice d in InputSystem.devices)
+            if (d.added && InputSystem.IsFirstLayoutBasedOnSecond(d.layout, "ValveIndexController")) return true;
+        return false;
+    }
 
     public static List<BoneCurl> DefaultCurls() => new List<BoneCurl>
     {
@@ -179,12 +214,92 @@ public class ControllerHands : MonoBehaviour
         return rig;
     }
 
+    private void Update()
+    {
+        if (!calibrating && Keyboard.current != null && Keyboard.current[calibrateKey].wasPressedThisFrame)
+            StartCoroutine(CalibrateAfterDelay());
+    }
+
     private void LateUpdate()
     {
         float k = 1f - Mathf.Exp(-smoothing * Time.deltaTime);
-        UpdateHand(left, leftWristPosition, leftWristRotation, k);
-        UpdateHand(right, rightWristPosition, rightWristRotation, k);
+        if (IndexConnected())
+        {
+            UpdateHand(left, leftWristPosition, leftWristRotation, k);
+            UpdateHand(right, rightWristPosition, rightWristRotation, k);
+        }
+        else
+        {
+            UpdateHand(left, otherLeftWristPosition, otherLeftWristRotation, k);
+            UpdateHand(right, otherRightWristPosition, otherRightWristRotation, k);
+        }
     }
+
+    [ContextMenu("Calibrate hands in 3 seconds")]
+    private void CalibrateFromMenu()
+    {
+        if (!Application.isPlaying) { Debug.LogWarning("ControllerHands: calibration only works in Play mode.", this); return; }
+        if (!calibrating) StartCoroutine(CalibrateAfterDelay());
+    }
+
+    private IEnumerator CalibrateAfterDelay()
+    {
+        calibrating = true;
+        Debug.Log($"ControllerHands: calibrating in {calibrateDelay:0} s. Hold both controllers naturally in front of you, " +
+                  "pointing forward, thumbs on top, and keep still.", this);
+        yield return new WaitForSeconds(calibrateDelay);
+        Calibrate();
+        calibrating = false;
+    }
+
+    // Fits each hand to how the controller is being held right now: fingers wrapped around the handle,
+    // pointing the way the player faces, back of the hand facing outwards (tilted up a little).
+    private void Calibrate()
+    {
+        Camera cam = Camera.main;
+        if (cam == null) { Debug.LogWarning("ControllerHands: no main camera to calibrate against.", this); return; }
+
+        Vector3 forward = Vector3.ProjectOnPlane(cam.transform.forward, Vector3.up).normalized;
+        if (forward.sqrMagnitude < 0.01f) forward = Vector3.forward;
+        Vector3 rightDir = Vector3.Cross(Vector3.up, forward).normalized;
+        bool index = IndexConnected();
+
+        if (left != null && FitHand(left, forward, -rightDir, out Vector3 lp, out Vector3 lr))
+        {
+            if (index) { leftWristPosition = lp; leftWristRotation = lr; }
+            else { otherLeftWristPosition = lp; otherLeftWristRotation = lr; }
+        }
+        if (right != null && FitHand(right, forward, rightDir, out Vector3 rp, out Vector3 rr))
+        {
+            if (index) { rightWristPosition = rp; rightWristRotation = rr; }
+            else { otherRightWristPosition = rp; otherRightWristRotation = rr; }
+        }
+
+        string set = index ? "Valve Index" : "other controllers";
+        Debug.Log($"ControllerHands: calibrated for {set}. Copy these into the '{set}' fields after leaving Play mode:\n" +
+                  $"  Left  position {Fmt(index ? leftWristPosition : otherLeftWristPosition)}  rotation {Fmt(index ? leftWristRotation : otherLeftWristRotation)}\n" +
+                  $"  Right position {Fmt(index ? rightWristPosition : otherRightWristPosition)}  rotation {Fmt(index ? rightWristRotation : otherRightWristRotation)}", this);
+    }
+
+    private bool FitHand(HandRig rig, Vector3 forward, Vector3 outward, out Vector3 localPos, out Vector3 localEuler)
+    {
+        localPos = default; localEuler = default;
+        Transform controller = rig.root != null ? rig.root.parent : null;
+        if (controller == null) return false;
+
+        float tilt = calibrateDorsalTilt * Mathf.Deg2Rad;
+        Vector3 dorsal = (outward * Mathf.Cos(tilt) + Vector3.up * Mathf.Sin(tilt)).normalized;
+        Quaternion wristWorld = Quaternion.LookRotation(forward, dorsal);   // wrist +Z = fingers, +Y = back of hand
+
+        // Fist around the handle: the handle sits 8.6 cm along the fingers and 2.5 cm on the palm side of the wrist.
+        Vector3 wristPos = controller.TransformPoint(handleOffset) - wristWorld * new Vector3(0f, -0.0248f, 0.0856f);
+
+        localPos = controller.InverseTransformPoint(wristPos);
+        localEuler = (Quaternion.Inverse(controller.rotation) * wristWorld).eulerAngles;
+        return true;
+    }
+
+    private static string Fmt(Vector3 v) => $"({v.x:0.####}, {v.y:0.####}, {v.z:0.####})";
 
     private static void UpdateHand(HandRig rig, Vector3 wristPos, Vector3 wristEuler, float k)
     {
