@@ -12043,7 +12043,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6748289661167705875
 Transform:
   m_ObjectHideFlags: 0
@@ -12077,6 +12077,133 @@ MonoBehaviour:
   rightControllerVisualName: Right Controller Visual
   fallBackToControllers: 1
   debugLogging: 1
+--- !u!1 &4174383056877916065
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7508369492049632381}
+  - component: {fileID: 7752131759759641624}
+  m_Layer: 0
+  m_Name: Controller Hands
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7508369492049632381
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4174383056877916065}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7752131759759641624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4174383056877916065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: caaad13f4e4146f29fe5f258651220ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ControllerHands
+  leftHandModel: {fileID: 919132149155446097, guid: bf7151579c38e2a44be94ba8773876c1, type: 3}
+  rightHandModel: {fileID: 919132149155446097, guid: 56186ccf27ad7864681108ed88349071, type: 3}
+  handMaterial: {fileID: 2100000, guid: 613690cd962241049a0ec289a6ff835e, type: 2}
+  actions: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  leftGripAction: XRI Left Interaction/Select Value
+  leftTriggerAction: XRI Left Interaction/Activate Value
+  rightGripAction: XRI Right Interaction/Select Value
+  rightTriggerAction: XRI Right Interaction/Activate Value
+  leftControllerName: Left Controller
+  rightControllerName: Right Controller
+  leftControllerVisualName: Left Controller Visual
+  rightControllerVisualName: Right Controller Visual
+  hideControllerModels: 1
+  leftWristPosition: {x: -0.0068, y: 0.0856, z: 0}
+  leftWristRotation: {x: 90, y: -90, z: 0}
+  rightWristPosition: {x: 0.0068, y: 0.0856, z: 0}
+  rightWristRotation: {x: 90, y: -90, z: 180}
+  smoothing: 20
+  curls:
+  - bone: IndexProximal
+    relaxed: 5
+    grip: 35
+    trigger: 35
+  - bone: IndexIntermediate
+    relaxed: 8
+    grip: 40
+    trigger: 45
+  - bone: IndexDistal
+    relaxed: 5
+    grip: 20
+    trigger: 20
+  - bone: MiddleProximal
+    relaxed: 5
+    grip: 55
+    trigger: 0
+  - bone: MiddleIntermediate
+    relaxed: 8
+    grip: 75
+    trigger: 0
+  - bone: MiddleDistal
+    relaxed: 5
+    grip: 40
+    trigger: 0
+  - bone: RingProximal
+    relaxed: 5
+    grip: 58
+    trigger: 0
+  - bone: RingIntermediate
+    relaxed: 8
+    grip: 75
+    trigger: 0
+  - bone: RingDistal
+    relaxed: 5
+    grip: 40
+    trigger: 0
+  - bone: LittleMetacarpal
+    relaxed: 0
+    grip: 8
+    trigger: 0
+  - bone: LittleProximal
+    relaxed: 5
+    grip: 60
+    trigger: 0
+  - bone: LittleIntermediate
+    relaxed: 8
+    grip: 75
+    trigger: 0
+  - bone: LittleDistal
+    relaxed: 5
+    grip: 40
+    trigger: 0
+  - bone: ThumbMetacarpal
+    relaxed: 0
+    grip: 10
+    trigger: 0
+  - bone: ThumbProximal
+    relaxed: 3
+    grip: 25
+    trigger: 0
+  - bone: ThumbDistal
+    relaxed: 3
+    grip: 20
+    trigger: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -12114,3 +12241,4 @@ SceneRoots:
   - {fileID: 5079159199621395412}
   - {fileID: 8593598414891144012}
   - {fileID: 6748289661167705875}
+  - {fileID: 7508369492049632381}
