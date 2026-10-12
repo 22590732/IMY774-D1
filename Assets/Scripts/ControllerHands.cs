@@ -129,6 +129,10 @@ public class ControllerHands : MonoBehaviour
 
         left = Build(leftHandModel, leftController, "L_", leftGripAction, leftTriggerAction);
         right = Build(rightHandModel, rightController, "R_", rightGripAction, rightTriggerAction);
+
+        Debug.Log($"ControllerHands: left hand {(left != null ? "attached to " + leftController.name : "NOT attached")}, " +
+                  $"right hand {(right != null ? "attached to " + rightController.name : "NOT attached")}; " +
+                  $"controller models {(hideControllerModels ? "hidden" : "shown")}.", this);
     }
 
     private HandRig Build(GameObject model, Transform controller, string prefix, string gripName, string triggerName)

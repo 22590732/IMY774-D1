@@ -24,9 +24,9 @@ public class IndexGripSelect : MonoBehaviour
     [SerializeField] private string[] selectActions = { "XRI Left Interaction/Select", "XRI Right Interaction/Select" };
 
     [Tooltip("Grip force (0-1) needed to grab.")]
-    [Range(0.05f, 1f)] [SerializeField] private float pressPoint = 0.5f;
+    [Range(0.05f, 1f)] [SerializeField] private float pressPoint = 0.25f;
     [Tooltip("Grip force (0-1) below which the object is released. Lower = harder to drop by accident, higher = easier to let go.")]
-    [Range(0f, 0.95f)] [SerializeField] private float releasePoint = 0.375f;
+    [Range(0f, 0.95f)] [SerializeField] private float releasePoint = 0.15f;
 
     [SerializeField] private bool debugLogging = true;
 
