@@ -61,6 +61,8 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private AudioSource voiceSource;
     [Tooltip("Optional. The music is turned down while the voiceover plays.")]
     [SerializeField] private AudioSource musicSource;
+    [Tooltip("Optional (T14). Used instead of Music Source when set: ducks the MusicPlayer.")]
+    [SerializeField] private MusicPlayer musicPlayer;
     [Range(0f, 1f)] [SerializeField] private float musicDuckFactor = 0.35f;
 
     [Header("Reminders")]
@@ -351,7 +353,14 @@ public class TutorialManager : MonoBehaviour
 
     private void UpdateMusicDuck()
     {
-        if (musicSource == null || voiceSource == null) return;
+        if (voiceSource == null) return;
+        if (musicPlayer != null)
+        {
+            float duck = voiceSource.isPlaying ? musicDuckFactor : 1f;
+            musicPlayer.Duck = Mathf.MoveTowards(musicPlayer.Duck, duck, 2f * Time.deltaTime);
+            return;
+        }
+        if (musicSource == null) return;
         float target = voiceSource.isPlaying ? baseMusicVolume * musicDuckFactor : baseMusicVolume;
         musicSource.volume = Mathf.MoveTowards(musicSource.volume, target, baseMusicVolume * 2f * Time.deltaTime);
     }

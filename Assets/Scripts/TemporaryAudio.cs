@@ -18,6 +18,7 @@ public class TemporaryAudio : MonoBehaviour
 
         audioSource.Play();
 
-        Destroy(gameObject, clip.length);
+        // A lower pitch plays the clip more slowly, so it lasts longer than clip.length.
+        Destroy(gameObject, clip.length / Mathf.Max(0.1f, Mathf.Abs(pitch)) + 0.05f);
     }
 }
