@@ -417,4 +417,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResizableProp
   minMultiplier: 0.2
+  minWorldSize: 0.025
   maxMultiplier: 5

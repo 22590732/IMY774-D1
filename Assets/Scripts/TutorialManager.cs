@@ -18,7 +18,8 @@ public enum TutorialTrigger
     BallInCup,          // NewCupTrigger.AnyScored
     PropRefilled,       // PropSpawner.Refilled
     PropResized,        // PropResizer.ResizeFinished (size changed by more than the threshold)
-    PropDeleted         // PropDeleter.PropDeleted
+    PropDeleted,        // PropDeleter.PropDeleted
+    MenuItemTaken       // PropMenu.ItemTaken (added last so existing steps keep their values)
 }
 
 [Serializable]
@@ -147,6 +148,7 @@ public class TutorialManager : MonoBehaviour
         PropSpawner.Refilled += OnPropRefilled;
         PropResizer.ResizeFinished += OnPropResized;
         PropDeleter.PropDeleted += OnPropDeleted;
+        PropMenu.ItemTaken += OnMenuItemTaken;
 
         leftClick = new InputAction("Tutorial Skip Left", InputActionType.Button, leftClickBinding);
         rightClick = new InputAction("Tutorial Skip Right", InputActionType.Button, rightClickBinding);
@@ -162,6 +164,7 @@ public class TutorialManager : MonoBehaviour
         PropSpawner.Refilled -= OnPropRefilled;
         PropResizer.ResizeFinished -= OnPropResized;
         PropDeleter.PropDeleted -= OnPropDeleted;
+        PropMenu.ItemTaken -= OnMenuItemTaken;
 
         leftClick?.Dispose();
         rightClick?.Dispose();
@@ -322,6 +325,7 @@ public class TutorialManager : MonoBehaviour
     private void OnBallInCup(NewCupTrigger cup) => Complete(TutorialTrigger.BallInCup);
     private void OnPropRefilled(PropSpawner spawner) => Complete(TutorialTrigger.PropRefilled);
     private void OnPropDeleted() => Complete(TutorialTrigger.PropDeleted);
+    private void OnMenuItemTaken(GameObject prop) => Complete(TutorialTrigger.MenuItemTaken);
 
     private void OnPropResized(float factor)
     {

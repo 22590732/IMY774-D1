@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.XR.Interaction.Toolkit.Inputs.Haptics;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
@@ -25,8 +26,20 @@ public class PropResizer : MonoBehaviour
     [Tooltip("How far (metres) to raise the controller to double the prop's size. Lowering by the same amount halves it.")]
     [SerializeField] private float metresToDouble = 0.5f;
 
+    [Header("Limit feedback")]
+    [Tooltip("This hand's haptics. Found automatically on the controller if empty.")]
+    [SerializeField] private HapticImpulsePlayer haptics;
+    [Tooltip("Rumble when the prop reaches its smallest size.")]
+    [SerializeField] private bool rumbleAtMinimum = true;
+    [Tooltip("Rumble when the prop reaches its largest size.")]
+    [SerializeField] private bool rumbleAtMaximum = false;
+    [Range(0f, 1f)] [SerializeField] private float rumbleAmplitude = 0.7f;
+    [SerializeField] private float rumbleDuration = 0.12f;
+
     [Header("Debug")]
     [SerializeField] private bool debugLogging = true;
+
+    private ResizableProp.Limit lastLimit = ResizableProp.Limit.None;
 
     private ResizableProp active;
     private float startHeight;
@@ -45,6 +58,13 @@ public class PropResizer : MonoBehaviour
     {
         handReference = transform;
         interactor = GetComponentInChildren<XRBaseInteractor>();
+    }
+
+    private void Awake()
+    {
+        if (haptics == null) haptics = GetComponentInChildren<HapticImpulsePlayer>(true);
+        if (haptics == null) haptics = GetComponentInParent<HapticImpulsePlayer>();
+        if (haptics == null && interactor != null) haptics = interactor.GetComponentInParent<HapticImpulsePlayer>();
     }
 
     private void OnEnable()
@@ -116,6 +136,7 @@ public class PropResizer : MonoBehaviour
         Transform reference = handReference != null ? handReference : transform;
         startHeight = reference.position.y;
         startMultiplier = active.CurrentMultiplier;
+        lastLimit = ResizableProp.Limit.None;
 
         if (debugLogging)
             Debug.Log($"{name}: resize started on '{prop.name}' at {startMultiplier:F2}x.", this);
@@ -130,7 +151,17 @@ public class PropResizer : MonoBehaviour
         float delta = reference.position.y - startHeight;
         float factor = Mathf.Pow(2f, delta / metresToDouble);
 
-        active.ApplyFactor(startMultiplier, factor);
+        ResizableProp.Limit limit = active.ApplyFactor(startMultiplier, factor);
+
+        // One rumble each time the prop arrives at a limit (not every frame it stays there).
+        if (limit != lastLimit && limit != ResizableProp.Limit.None)
+        {
+            bool rumble = (limit == ResizableProp.Limit.Min && rumbleAtMinimum) ||
+                          (limit == ResizableProp.Limit.Max && rumbleAtMaximum);
+            if (rumble && haptics != null) haptics.SendHapticImpulse(rumbleAmplitude, rumbleDuration);
+            if (debugLogging) Debug.Log($"{name}: '{active.name}' reached its {(limit == ResizableProp.Limit.Min ? "smallest" : "largest")} size.", this);
+        }
+        lastLimit = limit;
     }
 
     private float ReadForce()

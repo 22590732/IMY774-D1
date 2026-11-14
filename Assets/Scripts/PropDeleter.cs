@@ -6,8 +6,10 @@ using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 /// <summary>
-/// Put one on each controller. While B is held, a laser shows where the controller points, and any
-/// prop it touches is permanently deleted. A prop is anything with an XR Grab Interactable,
+/// Put one on each controller. While the trigger is pulled all the way (the "Delete" action, moved
+/// from B to the trigger so it is far from A = spawn), a laser shows where the controller points, and any
+/// prop it touches is permanently deleted. Nothing happens while this hand is holding something,
+/// so squeezing during a throw can't delete anything. A prop is anything with an XR Grab Interactable,
 /// except objects on a Joint (doors), which are fixtures.
 ///
 /// Aim direction, in priority order: the Ray Origin you assign, else the Near-Far Interactor's own
@@ -16,7 +18,7 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 public class PropDeleter : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private InputActionReference deleteAction;   // B = Secondary Button
+    [SerializeField] private InputActionReference deleteAction;   // XRI Left/Right "Delete" = trigger click
     [Tooltip("Optional. Leave empty to use the Near-Far Interactor's aim (recommended).")]
     [SerializeField] private Transform rayOrigin;
     [Tooltip("Optional. Found automatically if it is on this same object.")]
@@ -31,6 +33,8 @@ public class PropDeleter : MonoBehaviour
     [SerializeField] private bool deleteWhileHeld = true;
     [Tooltip("Minimum time between deletes while B is held.")]
     [SerializeField] private float repeatDelay = 0.15f;
+    [Tooltip("Ignore the delete button while this hand holds something.")]
+    [SerializeField] private bool ignoreWhileHolding = true;
     [Tooltip("Laser thickness in metres. Too thin is invisible in a headset.")]
     [SerializeField] private float laserWidth = 0.012f;
 
@@ -101,6 +105,7 @@ public class PropDeleter : MonoBehaviour
         if (deleteAction == null || deleteAction.action == null) return;
 
         bool held = deleteAction.action.IsPressed();
+        if (held && ignoreWhileHolding && nearFar != null && nearFar.hasSelection) held = false;
 
         if (held != wasHeld)
         {

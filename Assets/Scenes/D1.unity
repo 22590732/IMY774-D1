@@ -8359,6 +8359,11 @@ MonoBehaviour:
   handReference: {fileID: 897412090}
   pressThreshold: 0.3
   metresToDouble: 0.5
+  haptics: {fileID: 0}
+  rumbleAtMinimum: 1
+  rumbleAtMaximum: 0
+  rumbleAmplitude: 0.7
+  rumbleDuration: 0.12
   debugLogging: 1
 --- !u!114 &897412101
 MonoBehaviour:
@@ -8382,6 +8387,7 @@ MonoBehaviour:
     m_Bits: 4294967295
   deleteWhileHeld: 1
   repeatDelay: 0.15
+  ignoreWhileHolding: 1
   laserWidth: 0.012
   debugLogging: 1
 --- !u!120 &897412102
@@ -8511,6 +8517,11 @@ MonoBehaviour:
   handReference: {fileID: 897412093}
   pressThreshold: 0.3
   metresToDouble: 0.5
+  haptics: {fileID: 0}
+  rumbleAtMinimum: 1
+  rumbleAtMaximum: 0
+  rumbleAmplitude: 0.7
+  rumbleDuration: 0.12
   debugLogging: 1
 --- !u!114 &897412105
 MonoBehaviour:
@@ -8534,6 +8545,7 @@ MonoBehaviour:
     m_Bits: 4294967295
   deleteWhileHeld: 1
   repeatDelay: 0.15
+  ignoreWhileHolding: 1
   laserWidth: 0.012
   debugLogging: 1
 --- !u!120 &897412106
@@ -12206,6 +12218,87 @@ PrefabInstance:
       addedObject: {fileID: 282413537}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ad0da140a0075394aa9e1ce4a7d1cd1f, type: 3}
+--- !u!1 &2035679669
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2035679671}
+  - component: {fileID: 2035679670}
+  m_Layer: 0
+  m_Name: Prop Menu
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2035679670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2035679669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25ea3da909abbc540ab579b534bc8259, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PropMenu
+  prefabs:
+  - {fileID: 3045773910560168668, guid: 69cf293326ed6654dbc4fba1607db73e, type: 3}
+  - {fileID: 4279863291358223709, guid: 7d733617e5233754c984a0b92ae36412, type: 3}
+  - {fileID: 7825291346668788011, guid: 85e799ecb2380704f9daf295f4df94db, type: 3}
+  - {fileID: 5278258070872245430, guid: 1e5814c2859d5104cbec02c0a30b3fa2, type: 3}
+  - {fileID: 8760264729018591948, guid: 375713c1e12fa0f48953fba9f73129eb, type: 3}
+  leftToggleBinding: <XRController>{LeftHand}/{SecondaryButton}
+  rightToggleBinding: <XRController>{RightHand}/{SecondaryButton}
+  leftStickBinding: <XRController>{LeftHand}/{Primary2DAxis}
+  rightStickBinding: <XRController>{RightHand}/{Primary2DAxis}
+  inputActions: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  teleportActions:
+  - XRI Left Locomotion/Teleport Mode
+  - XRI Right Locomotion/Teleport Mode
+  distance: 0.55
+  heightOffset: -0.35
+  visibleCount: 5
+  spacingDegrees: 20
+  itemSize: 0.14
+  centreScale: 1.35
+  spinSpeed: 35
+  followAngle: 35
+  followDistance: 0.4
+  followSpeed: 4
+  stickThreshold: 0.6
+  stickRelease: 0.3
+  repeatDelay: 0.45
+  repeatInterval: 0.2
+  scrollSmoothing: 14
+  refillDelay: 0.35
+  popInTime: 0.2
+  openClip: {fileID: 0}
+  closeClip: {fileID: 0}
+  scrollClip: {fileID: 0}
+  clipVolume: 0.5
+  hapticAmplitude: 0.2
+  hapticDuration: 0.04
+--- !u!4 &2035679671
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2035679669}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2047312756
 GameObject:
   m_ObjectHideFlags: 0
@@ -13922,7 +14015,7 @@ MonoBehaviour:
     instruction: Grab the ball container from the middle shelf. Squeeze the grip
       to pick it up.
     reminderText: Reach for the ball container and squeeze the grip.
-    voiceover: {fileID: 0}
+    voiceover: {fileID: 8300000, guid: a4d27a42df0baa2429a4908b046d01d5, type: 3}
     reminder: {fileID: 8300000, guid: d498f3788b4fd484fade4da62b70d730, type: 3}
     completeWhen: 1
     waitSeconds: 2
@@ -13959,13 +14052,13 @@ MonoBehaviour:
     imageRows: 4
     imageFrames: 0
     imageFps: 12
-  - title: Endless props
-    instruction: Take anything you like from the cupboard. Don't worry, it refills
-      itself.
-    reminderText: Grab a prop from the cupboard and watch the shelf refill.
+  - title: Prop menu
+    instruction: Press B to open the prop menu. Push the joystick left or right to
+      browse, then grab the prop you want.
+    reminderText: Press B, then grab a prop from the menu.
     voiceover: {fileID: 8300000, guid: 0e249e1e23b7348469a4abcb68309c40, type: 3}
     reminder: {fileID: 8300000, guid: c99867a49669e06489b88a7c12fb36b9, type: 3}
-    completeWhen: 4
+    completeWhen: 7
     waitSeconds: 2
     highlight: {fileID: 0}
     image: {fileID: 2800000, guid: d9e758447dcd3d646ab275ba461e7cde, type: 3}
@@ -13988,8 +14081,9 @@ MonoBehaviour:
     imageFrames: 0
     imageFps: 12
   - title: Delete
-    instruction: Made a mess? Hold B and point the laser at a prop to delete it.
-    reminderText: Hold B and point at a prop.
+    instruction: Made a mess? Pull the trigger all the way and point the laser at
+      a prop to delete it.
+    reminderText: Pull the trigger and point at a prop.
     voiceover: {fileID: 8300000, guid: 8b0aa7b3779c60948b2114879d53d8d8, type: 3}
     reminder: {fileID: 8300000, guid: 8db75b376a5f2c749bcf1339d83f64e6, type: 3}
     completeWhen: 6
@@ -15466,3 +15560,4 @@ SceneRoots:
   - {fileID: 6748289661167705875}
   - {fileID: 7508369492049632381}
   - {fileID: 2048035530}
+  - {fileID: 2035679671}
