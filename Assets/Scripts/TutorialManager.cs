@@ -36,6 +36,16 @@ public class TutorialStep
     public float waitSeconds = 2f;
     [Tooltip("Optional object switched on only during this step, e.g. a marker with TutorialHighlight.")]
     public GameObject highlight;
+
+    [Header("Image hint (optional)")]
+    [Tooltip("Picture shown on the left of the panel. Can be a flipbook sprite sheet: frames left to right, top to bottom.")]
+    public Texture2D image;
+    [Min(1)] public int imageColumns = 1;
+    [Min(1)] public int imageRows = 1;
+    [Tooltip("Number of frames in the sheet. 0 = every cell.")]
+    [Min(0)] public int imageFrames = 0;
+    [Tooltip("Flipbook playback speed (frames per second).")]
+    public float imageFps = 12f;
 }
 
 /// <summary>
@@ -85,6 +95,8 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private float textHeight = 0.035f;
     [SerializeField] private Color panelColor = new Color(0.05f, 0.06f, 0.09f, 0.82f);
     [SerializeField] private Color titleColor = new Color(1f, 0.62f, 0.25f, 1f);
+    [Tooltip("Size of the square image hint on the left of the panel, in metres. Steps without an image use the full width for text.")]
+    [SerializeField] private float imageSize = 0.4f;
 
     [Header("Skip (click both joysticks)")]
     [SerializeField] private float holdToSkipStep = 1.5f;
@@ -120,6 +132,10 @@ public class TutorialManager : MonoBehaviour
     private RectTransform panelRect;
     private TMP_Text titleText, bodyText, hintText;
     private float pulseUntil;
+
+    private RawImage hintImage;
+    private TutorialStep imageStep;
+    private float imageStartTime;
 
     // ------------------------------------------------------------------ lifecycle
 
@@ -176,6 +192,7 @@ public class TutorialManager : MonoBehaviour
         UpdateSkipInput();
         UpdateMusicDuck();
         UpdatePanelPulse();
+        UpdateHintImage();
     }
 
     // ------------------------------------------------------------------ public control
@@ -377,6 +394,58 @@ public class TutorialManager : MonoBehaviour
     {
         if (titleText != null) titleText.text = $"{step.title}   <size=70%><color=#BBBBBB>{index + 1} / {steps.Count}</color></size>";
         if (bodyText != null) bodyText.text = text;
+        ShowImage(step);
+    }
+
+    // ------------------------------------------------------------------ image hint
+
+    private void ShowImage(TutorialStep step)
+    {
+        if (hintImage == null) return;
+        bool show = step != null && step.image != null;
+
+        if (show && imageStep != step)
+        {
+            imageStep = step;
+            imageStartTime = Time.time;
+            hintImage.texture = step.image;
+            SetImageFrame(0);
+        }
+        if (!show) imageStep = null;
+        hintImage.enabled = show;
+
+        // Text moves right of the image while one is shown.
+        float left = show ? (imageSize + 0.06f) * PixelsPerMetre : 0.04f * PixelsPerMetre;
+        foreach (TMP_Text t in new[] { titleText, bodyText, hintText })
+        {
+            if (t == null) continue;
+            RectTransform rt = t.rectTransform;
+            rt.offsetMin = new Vector2(left, rt.offsetMin.y);
+        }
+    }
+
+    private void UpdateHintImage()
+    {
+        if (hintImage == null || !hintImage.enabled || imageStep == null) return;
+        int count = FrameCount(imageStep);
+        if (count <= 1 || imageStep.imageFps <= 0f) return;
+        int frame = (int)((Time.time - imageStartTime) * imageStep.imageFps) % count;
+        SetImageFrame(frame);
+    }
+
+    private static int FrameCount(TutorialStep s)
+    {
+        int cells = Mathf.Max(1, s.imageColumns) * Mathf.Max(1, s.imageRows);
+        return s.imageFrames > 0 ? Mathf.Min(s.imageFrames, cells) : cells;
+    }
+
+    private void SetImageFrame(int frame)
+    {
+        int cols = Mathf.Max(1, imageStep.imageColumns);
+        int rows = Mathf.Max(1, imageStep.imageRows);
+        float w = 1f / cols, h = 1f / rows;
+        int c = frame % cols, r = frame / cols;
+        hintImage.uvRect = new Rect(c * w, 1f - (r + 1) * h, w, h);   // row 0 is the top of the sheet
     }
 
     private void SetHighlight(TutorialStep step, bool on)
@@ -425,6 +494,17 @@ public class TutorialManager : MonoBehaviour
         bodyText.fontSizeMax = body;
         hintText = MakeText("Hint", 0.03f, 0.2f, body * 0.5f, new Color(0.75f, 0.75f, 0.75f, 1f), FontStyles.Italic);
         hintText.text = DefaultHint;
+
+        var img = new GameObject("Hint Image", typeof(RectTransform), typeof(RawImage));
+        img.transform.SetParent(panelRoot.transform, false);
+        var irt = (RectTransform)img.transform;
+        irt.anchorMin = irt.anchorMax = new Vector2(0f, 0.5f);
+        irt.pivot = new Vector2(0f, 0.5f);
+        irt.sizeDelta = Vector2.one * imageSize * PixelsPerMetre;
+        irt.anchoredPosition = new Vector2(0.03f * PixelsPerMetre, 0f);
+        hintImage = img.GetComponent<RawImage>();
+        hintImage.raycastTarget = false;
+        hintImage.enabled = false;
 
         if (wallAnchor != null)
         {

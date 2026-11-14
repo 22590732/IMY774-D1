@@ -1,0 +1,10 @@
+Tutorial controller hint images (TUT_*.png)
+
+Rendered from "Valve Index Controller" mechanical CAD (index_controller.stp) by Valve Corporation,
+https://github.com/ValveSoftware/IndexHardware
+Licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
+(http://creativecommons.org/licenses/by-nc-sa/4.0/).
+
+Changes: tessellated, recoloured, buttons highlighted/animated, arrows and icons added
+(Blender 5.3 Workbench renders + Pillow). These images are shared under the same licence.
+Not affiliated with or endorsed by Valve. Non-commercial university project (IMY774, University of Pretoria).
