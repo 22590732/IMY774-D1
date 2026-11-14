@@ -13913,6 +13913,11 @@ MonoBehaviour:
     completeWhen: 0
     waitSeconds: 2
     highlight: {fileID: 0}
+    image: {fileID: 2800000, guid: 8b100e6e0e02ce74aac6c16ca8cc7a7b, type: 3}
+    imageColumns: 1
+    imageRows: 1
+    imageFrames: 0
+    imageFps: 12
   - title: Ball container
     instruction: Grab the ball container from the middle shelf. Squeeze the grip
       to pick it up.
@@ -13922,6 +13927,11 @@ MonoBehaviour:
     completeWhen: 1
     waitSeconds: 2
     highlight: {fileID: 6426647750051772782}
+    image: {fileID: 2800000, guid: 47e9a9a36558add43a17397558c59d3a, type: 3}
+    imageColumns: 6
+    imageRows: 4
+    imageFrames: 0
+    imageFps: 12
   - title: Spawn a ball
     instruction: Now press A on your right hand to spawn a ball.
     reminderText: Press A to spawn a ball.
@@ -13930,6 +13940,11 @@ MonoBehaviour:
     completeWhen: 2
     waitSeconds: 2
     highlight: {fileID: 0}
+    image: {fileID: 2800000, guid: 762f9b28ebd8b0f46b6effe49ea62511, type: 3}
+    imageColumns: 6
+    imageRows: 4
+    imageFrames: 0
+    imageFps: 12
   - title: Trick shot
     instruction: Grab the ball and throw it into a cup. You can take a cup from the
       cupboard and put it anywhere.
@@ -13939,6 +13954,11 @@ MonoBehaviour:
     completeWhen: 3
     waitSeconds: 2
     highlight: {fileID: 0}
+    image: {fileID: 2800000, guid: 6dfd93470d99fe34b955feea28c39723, type: 3}
+    imageColumns: 6
+    imageRows: 4
+    imageFrames: 0
+    imageFps: 12
   - title: Endless props
     instruction: Take anything you like from the cupboard. Don't worry, it refills
       itself.
@@ -13948,6 +13968,11 @@ MonoBehaviour:
     completeWhen: 4
     waitSeconds: 2
     highlight: {fileID: 0}
+    image: {fileID: 2800000, guid: d9e758447dcd3d646ab275ba461e7cde, type: 3}
+    imageColumns: 6
+    imageRows: 4
+    imageFrames: 0
+    imageFps: 12
   - title: Resize
     instruction: Hold a prop and press the trackpad firmly. Move your hand up to
       grow it, down to shrink it.
@@ -13957,6 +13982,11 @@ MonoBehaviour:
     completeWhen: 5
     waitSeconds: 2
     highlight: {fileID: 0}
+    image: {fileID: 2800000, guid: bafdf5779310a9b479a86c04f04a3124, type: 3}
+    imageColumns: 6
+    imageRows: 4
+    imageFrames: 0
+    imageFps: 12
   - title: Delete
     instruction: Made a mess? Hold B and point the laser at a prop to delete it.
     reminderText: Hold B and point at a prop.
@@ -13965,6 +13995,11 @@ MonoBehaviour:
     completeWhen: 6
     waitSeconds: 2
     highlight: {fileID: 0}
+    image: {fileID: 2800000, guid: 15eede10a1b4c0c42bfab7f7da2d8091, type: 3}
+    imageColumns: 6
+    imageRows: 4
+    imageFrames: 0
+    imageFps: 12
   - title: Free play
     instruction: That's it. Build your best trick shot.
     reminderText: 
@@ -13973,6 +14008,11 @@ MonoBehaviour:
     completeWhen: 0
     waitSeconds: 3
     highlight: {fileID: 0}
+    image: {fileID: 2800000, guid: 6c5ce5646e524fc449ba5b741529c01c, type: 3}
+    imageColumns: 1
+    imageRows: 1
+    imageFrames: 0
+    imageFps: 12
   playOnStart: 1
   pauseBetweenSteps: 0.75
   resizeThreshold: 0.15
@@ -13991,6 +14031,7 @@ MonoBehaviour:
   textHeight: 0.065
   panelColor: {r: 0.05, g: 0.06, b: 0.09, a: 0.82}
   titleColor: {r: 1, g: 0.62, b: 0.25, a: 1}
+  imageSize: 0.4
   holdToSkipStep: 1.5
   holdToSkipAll: 4
   leftClickBinding: <XRController>{LeftHand}/{Primary2DAxisClick}

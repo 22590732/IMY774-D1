@@ -39,7 +39,7 @@ public static class TutorialImageSetup
             return;
         }
 
-        var tm = Object.FindFirstObjectByType<TutorialManager>(FindObjectsInactive.Include);
+        var tm = Object.FindAnyObjectByType<TutorialManager>(FindObjectsInactive.Include);
         if (tm == null) { Debug.LogError("[Tutorial Images] No TutorialManager in D1."); return; }
 
         var found = new Dictionary<int, (Texture2D tex, int cols, int rows)>();
