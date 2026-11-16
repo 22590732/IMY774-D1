@@ -28,6 +28,10 @@ public class IndexGripSelect : MonoBehaviour
     [Tooltip("Grip force (0-1) below which the object is released. Lower = harder to drop by accident, higher = easier to let go.")]
     [Range(0f, 0.95f)] [SerializeField] private float releasePoint = 0.15f;
 
+    [Tooltip("T19: also let go when the squeeze drops below this fraction of its strongest point. 0 = off. " +
+             "Try 0.5 if throws still leave the hand late.")]
+    [Range(0f, 0.9f)] [SerializeField] private float releaseRatio = 0f;
+
     [SerializeField] private bool debugLogging = true;
 
     private const string GenericGripUsage = "{GripButton}";
@@ -101,8 +105,8 @@ public class IndexGripSelect : MonoBehaviour
     private void ApplyOverrides()
     {
         // Invariant culture: on PCs whose decimal separator is a comma, "0,2" would split the parameter list.
-        string interaction = string.Format(CultureInfo.InvariantCulture, "{0}(pressPoint={1},releasePoint={2})",
-                                           HysteresisPressInteraction.Name, pressPoint, releasePoint);
+        string interaction = string.Format(CultureInfo.InvariantCulture, "{0}(pressPoint={1},releasePoint={2},releaseRatio={3})",
+                                           HysteresisPressInteraction.Name, pressPoint, releasePoint, releaseRatio);
 
         foreach (InputActionAsset asset in Assets())
         {

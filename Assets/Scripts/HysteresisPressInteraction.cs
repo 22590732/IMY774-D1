@@ -26,7 +26,13 @@ public class HysteresisPressInteraction : IInputInteraction
     [Tooltip("Value (0-1) at which a pressed button counts as released. Keep it below Press Point.")]
     public float releasePoint = 0.1f;
 
+    [Tooltip("Optional (T19): also release when the value drops below this fraction of its peak since the press. " +
+             "0 = off. 0.5 lets go as soon as a firm squeeze is halved, which releases throws earlier.")]
+    public float releaseRatio = 0f;
+
     public const string Name = "HysteresisPress";
+
+    private float peak;
 
     static HysteresisPressInteraction()
     {
@@ -50,6 +56,7 @@ public class HysteresisPressInteraction : IInputInteraction
             case InputActionPhase.Canceled:
                 if (value >= pressPoint)
                 {
+                    peak = value;
                     context.Started();
                     context.PerformedAndStayPerformed();
                 }
@@ -57,13 +64,17 @@ public class HysteresisPressInteraction : IInputInteraction
 
             case InputActionPhase.Started:
                 if (value >= pressPoint)
+                {
+                    peak = Mathf.Max(peak, value);
                     context.PerformedAndStayPerformed();
+                }
                 else if (value <= release)
                     context.Canceled();
                 break;
 
             case InputActionPhase.Performed:
-                if (value <= release)
+                peak = Mathf.Max(peak, value);
+                if (value <= Mathf.Max(release, peak * releaseRatio))
                     context.Canceled();
                 break;
         }
@@ -71,5 +82,6 @@ public class HysteresisPressInteraction : IInputInteraction
 
     public void Reset()
     {
+        peak = 0f;
     }
 }
